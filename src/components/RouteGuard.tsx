@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGame } from "@/context/GameContext";
-import { ShieldAlert, Terminal } from "lucide-react";
+import { Lock, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 interface RouteGuardProps {
   requiredLevel: 2 | "victory";
@@ -30,39 +31,40 @@ export default function RouteGuard({ requiredLevel, children }: RouteGuardProps)
       playSound("error");
       const timer = setTimeout(() => {
         router.push("/");
-      }, 1600);
+      }, 2500);
       return () => clearTimeout(timer);
     }
   }, [isLoaded, level1Completed, level2Completed, requiredLevel, router, playSound]);
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-[#070a0f] flex items-center justify-center text-emerald-400 font-mono">
-        <div className="flex items-center gap-3">
-          <Terminal className="animate-spin h-5 w-5 text-emerald-500" />
-          <span>[SYSTEM]: INITIALIZING SECURITY PERMISSIONS...</span>
-        </div>
+      <div className="min-h-[60vh] flex items-center justify-center text-slate-400 font-sans text-sm">
+        <span>Memuat status tantangan...</span>
       </div>
     );
   }
 
   if (isDenied) {
     return (
-      <div className="min-h-screen bg-[#0d0202] text-red-500 flex flex-col items-center justify-center p-6 font-mono text-center">
-        <div className="max-w-md w-full bg-red-950/40 border border-red-600/60 rounded-lg p-6 shadow-[0_0_30px_rgba(239,68,68,0.3)] animate-pulse">
-          <ShieldAlert className="w-14 h-14 mx-auto mb-4 text-red-500" />
-          <h1 className="text-xl font-bold tracking-wider mb-2">
-            ⚠️ [SECURITY ALERT]: AKSES ILEGAL
-          </h1>
-          <p className="text-sm text-red-300 mb-4 leading-relaxed">
-            Percobaan bypass URL terdeteksi! Kamu programmer nakal ya wkwk 😜. Kamu harus
-            menyelesaikan tantangan level sebelumnya dulu sebelum mengakses protokol ini.
-          </p>
-          <div className="text-xs text-red-400/80 bg-black/60 p-3 rounded font-mono border border-red-900/50">
-            [SYS_ERR]: PERMISSION_DENIED (ROUTE_GUARD_BLOCK)
-            <br />
-            Mengarahkan kembali ke Root System (Level 1)...
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center font-sans">
+        <div className="max-w-sm w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <Lock className="w-5 h-5" />
           </div>
+          <h1 className="text-base font-semibold text-slate-100 mb-2">
+            Halaman ini belum terbuka
+          </h1>
+          <p className="text-xs text-slate-400 mb-5 leading-relaxed">
+            Selesaikan tantangan di level sebelumnya dulu ya. Kamu akan dialihkan ke halaman utama
+            sebentar lagi.
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg transition-colors w-full"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Kembali ke Halaman Utama</span>
+          </Link>
         </div>
       </div>
     );

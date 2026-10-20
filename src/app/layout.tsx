@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { GameProvider } from "@/context/GameContext";
 import TerminalNavbar from "@/components/TerminalNavbar";
-import CyberGrid from "@/components/CyberGrid";
+import AmbientBackground from "@/components/AmbientBackground";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "CTF // OPERATION SECRET VAULT",
-  description: "Interactive Cybersecurity Challenge: Steganography LSB & Fernet AES Cryptography",
+  title: "Teka-Teki Buat Kamu: CTF Mini",
+  description: "Dua tantangan kecil buat kamu: steganografi gambar dan dekripsi berkas.",
 };
 
 export default function RootLayout({
@@ -29,15 +29,15 @@ export default function RootLayout({
   return (
     <html lang="id" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-mono bg-[#070a0f] text-zinc-100 min-h-screen selection:bg-emerald-500 selection:text-black scanlines`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#090d16] text-slate-100 min-h-screen selection:bg-indigo-500 selection:text-white`}
       >
         <GameProvider>
-          <CyberGrid />
+          <AmbientBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
             <TerminalNavbar />
             <main className="flex-1 flex flex-col">{children}</main>
-            <footer className="py-4 border-t border-zinc-900 text-center text-[11px] text-zinc-500 font-mono">
-              OPERATION SECRET VAULT // AUTHORIZED ACCESS ONLY // BUILT FOR MY FAVORITE HACKER ❤️
+            <footer className="py-6 border-t border-slate-800/60 text-center text-xs text-slate-500 font-sans">
+              Dibuat khusus untuk kamu, selesaikan misinya dan klaim hadiahmu.
             </footer>
           </div>
         </GameProvider>
