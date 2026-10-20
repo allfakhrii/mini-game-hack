@@ -146,9 +146,6 @@ export default function VictoryPage() {
                   <Utensils className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-sm mb-1">Makan Enak</h3>
-                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                  Dimsum, Sushi, Ramen, All-You-Can-Eat, atau makanan favoritmu.
-                </p>
               </div>
 
               <button
@@ -168,9 +165,6 @@ export default function VictoryPage() {
                   <IceCream className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-sm mb-1">Jajan Es Krim</h3>
-                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                  Gelato, Mixue, McFlurry, dessert manis, atau waffle dingin.
-                </p>
               </div>
 
               <button
@@ -190,9 +184,6 @@ export default function VictoryPage() {
                   <Compass className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-sm mb-1">Jalan-Jalan</h3>
-                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                  Arcade, nonton bioskop, museum date, atau jalan sore berdua.
-                </p>
               </div>
 
               <button

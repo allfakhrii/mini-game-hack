@@ -16,14 +16,7 @@ export async function POST(req: Request) {
 
     // Verification check for the final decrypted text:
     const isMatch =
-      cleanInput.includes("access granted") ||
-      cleanInput.includes("selamat sayang") ||
-      cleanInput.includes("nembus pertahanan") ||
-      cleanInput.includes("gelar hacker") ||
-      cleanInput.includes("ctf{hacker_sejati_telah_lahir}") ||
-      cleanInput.includes("hacker_sejati") ||
-      cleanInput.includes("proud of you") ||
-      cleanInput.includes("babe");
+      cleanInput.includes("cacapendek");
 
     if (isMatch) {
       return NextResponse.json({
