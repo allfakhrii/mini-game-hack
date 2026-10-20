@@ -6,23 +6,26 @@ import { sound } from "@/lib/audio";
 interface GameState {
   level1Completed: boolean;
   level2Completed: boolean;
+  level3Completed: boolean;
   soundEnabled: boolean;
   isLoaded: boolean;
   toggleSound: () => void;
   verifyLevel1: (password: string) => Promise<{ success: boolean; message: string }>;
-  verifyLevel2: (flag: string) => Promise<{ success: boolean; message: string }>;
+  verifyLevel2: (word: string) => Promise<{ success: boolean; message: string }>;
+  verifyLevel3: (flag: string) => Promise<{ success: boolean; message: string }>;
   resetGame: () => void;
   playSound: (type: "click" | "success" | "error" | "glitch" | "victory") => void;
 }
 
 const GameContext = createContext<GameState | undefined>(undefined);
 
-const STORAGE_KEY = "ctf_challenge_progress_v1";
+const STORAGE_KEY = "ctf_challenge_progress_v2";
 const SOUND_KEY = "ctf_challenge_sound_v1";
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [level1Completed, setLevel1Completed] = useState<boolean>(false);
   const [level2Completed, setLevel2Completed] = useState<boolean>(false);
+  const [level3Completed, setLevel3Completed] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -34,6 +37,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const parsed = JSON.parse(storedProgress);
         setLevel1Completed(Boolean(parsed.level1Completed));
         setLevel2Completed(Boolean(parsed.level2Completed));
+        setLevel3Completed(Boolean(parsed.level3Completed));
       }
 
       const storedSound = localStorage.getItem(SOUND_KEY);
@@ -49,11 +53,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const saveProgress = (l1: boolean, l2: boolean) => {
+  const saveProgress = (l1: boolean, l2: boolean, l3: boolean) => {
     try {
       sessionStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ level1Completed: l1, level2Completed: l2 })
+        JSON.stringify({ level1Completed: l1, level2Completed: l2, level3Completed: l3 })
       );
     } catch {
       // ignore
@@ -91,6 +95,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Level 1: Steganography
   const verifyLevel1 = async (password: string): Promise<{ success: boolean; message: string }> => {
     try {
       const res = await fetch("/api/verify-level-1", {
@@ -102,7 +107,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       if (data.success) {
         setLevel1Completed(true);
-        saveProgress(true, level2Completed);
+        saveProgress(true, level2Completed, level3Completed);
         playSound("success");
         return { success: true, message: data.message };
       } else {
@@ -115,9 +120,35 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const verifyLevel2 = async (flag: string): Promise<{ success: boolean; message: string }> => {
+  // Level 2: Hash Cracking
+  const verifyLevel2 = async (word: string): Promise<{ success: boolean; message: string }> => {
     try {
       const res = await fetch("/api/verify-level-2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setLevel2Completed(true);
+        saveProgress(level1Completed, true, level3Completed);
+        playSound("success");
+        return { success: true, message: data.message };
+      } else {
+        playSound("error");
+        return { success: false, message: data.message || "Kata sandi hash tidak cocok!" };
+      }
+    } catch {
+      playSound("error");
+      return { success: false, message: "Gagal menghubungkan ke server verifikasi." };
+    }
+  };
+
+  // Level 3: Fernet AES Cryptography
+  const verifyLevel3 = async (flag: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const res = await fetch("/api/verify-level-3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ flag }),
@@ -125,13 +156,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
 
       if (data.success) {
-        setLevel2Completed(true);
-        saveProgress(level1Completed, true);
+        setLevel3Completed(true);
+        saveProgress(level1Completed, level2Completed, true);
         playSound("victory");
         return { success: true, message: data.message };
       } else {
         playSound("error");
-        return { success: false, message: data.message || "Flag tidak valid!" };
+        return { success: false, message: data.message || "Teks dekripsi tidak valid!" };
       }
     } catch {
       playSound("error");
@@ -142,6 +173,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const resetGame = () => {
     setLevel1Completed(false);
     setLevel2Completed(false);
+    setLevel3Completed(false);
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -154,11 +186,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       value={{
         level1Completed,
         level2Completed,
+        level3Completed,
         soundEnabled,
         isLoaded,
         toggleSound,
         verifyLevel1,
         verifyLevel2,
+        verifyLevel3,
         resetGame,
         playSound,
       }}

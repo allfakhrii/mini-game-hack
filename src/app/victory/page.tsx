@@ -215,7 +215,7 @@ export default function VictoryPage() {
 
         {/* Footer Action */}
         <div className="flex items-center justify-between pt-4 border-t border-slate-800/80 text-xs text-slate-500">
-          <span>Tantangan 2/2 Selesai</span>
+          <span>Tantangan 3/3 Selesai</span>
           <button
             type="button"
             onClick={handleReplay}

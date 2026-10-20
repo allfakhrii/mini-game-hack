@@ -58,7 +58,7 @@ export default function Level1Page() {
       {/* Top Header - Full Width */}
       <div className="mb-8">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-          Tantangan 1 dari 2: Steganografi
+          Tantangan 1 dari 3: Steganografi
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
           Seni Menyembunyikan Brankas di Tempat Terbuka
@@ -204,7 +204,7 @@ export default function Level1Page() {
                   onClick={handleNextLevel}
                   className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg text-xs flex items-center justify-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
                 >
-                  <span>Lanjut ke Level 2: Kriptografi</span>
+                  <span>Lanjut ke Level 2: Hash Cracking</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

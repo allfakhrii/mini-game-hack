@@ -7,8 +7,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function TerminalNavbar() {
-  const { soundEnabled, toggleSound, level1Completed, level2Completed, resetGame, playSound } =
-    useGame();
+  const {
+    soundEnabled,
+    toggleSound,
+    level1Completed,
+    level2Completed,
+    level3Completed,
+    resetGame,
+    playSound,
+  } = useGame();
   const pathname = usePathname();
 
   const handleReset = () => {
@@ -21,7 +28,7 @@ export default function TerminalNavbar() {
 
   return (
     <header className="sticky top-0 z-30 w-full border-b border-slate-800/80 bg-[#090d16]/85 backdrop-blur-md px-4 py-3 text-xs font-sans">
-      <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+      <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
         {/* Brand / Title */}
         <Link
           href="/"
@@ -33,9 +40,9 @@ export default function TerminalNavbar() {
         </Link>
 
         {/* Level Steps */}
-        <nav aria-label="Progress tantangan" className="flex items-center gap-1.5 sm:gap-2">
+        <nav aria-label="Progress tantangan" className="flex items-center gap-1 sm:gap-2">
           <div
-            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
               pathname === "/"
                 ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
                 : level1Completed
@@ -50,7 +57,7 @@ export default function TerminalNavbar() {
           <span className="text-slate-700">/</span>
 
           <div
-            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
               pathname === "/level-2"
                 ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
                 : level2Completed
@@ -59,21 +66,36 @@ export default function TerminalNavbar() {
             }`}
           >
             {level2Completed && <Check className="w-3.5 h-3.5" />}
-            <span>2. Berkas</span>
+            <span>2. Hash</span>
           </div>
 
           <span className="text-slate-700">/</span>
 
           <div
-            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              pathname === "/level-3"
+                ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
+                : level3Completed
+                ? "text-emerald-400"
+                : "text-slate-500"
+            }`}
+          >
+            {level3Completed && <Check className="w-3.5 h-3.5" />}
+            <span>3. Berkas</span>
+          </div>
+
+          <span className="text-slate-700">/</span>
+
+          <div
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
               pathname === "/victory"
                 ? "bg-rose-500/10 text-rose-300 border border-rose-500/30"
-                : level2Completed
+                : level3Completed
                 ? "text-rose-400"
                 : "text-slate-500"
             }`}
           >
-            <span>3. Hadiah</span>
+            <span>Hadiah</span>
           </div>
         </nav>
 
@@ -91,7 +113,7 @@ export default function TerminalNavbar() {
             )}
           </button>
 
-          {(level1Completed || level2Completed) && (
+          {(level1Completed || level2Completed || level3Completed) && (
             <button
               onClick={handleReset}
               className="flex items-center gap-1 px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-xs"

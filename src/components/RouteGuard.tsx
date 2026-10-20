@@ -7,13 +7,13 @@ import { Lock, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface RouteGuardProps {
-  requiredLevel: 2 | "victory";
+  requiredLevel: 2 | 3 | "victory";
   children: React.ReactNode;
 }
 
 export default function RouteGuard({ requiredLevel, children }: RouteGuardProps) {
   const router = useRouter();
-  const { level1Completed, level2Completed, isLoaded, playSound } = useGame();
+  const { level1Completed, level2Completed, level3Completed, isLoaded, playSound } = useGame();
   const [isDenied, setIsDenied] = useState(false);
 
   useEffect(() => {
@@ -22,8 +22,10 @@ export default function RouteGuard({ requiredLevel, children }: RouteGuardProps)
     let allowed = false;
     if (requiredLevel === 2) {
       allowed = level1Completed;
-    } else if (requiredLevel === "victory") {
+    } else if (requiredLevel === 3) {
       allowed = level1Completed && level2Completed;
+    } else if (requiredLevel === "victory") {
+      allowed = level1Completed && level2Completed && level3Completed;
     }
 
     if (!allowed) {
@@ -34,7 +36,15 @@ export default function RouteGuard({ requiredLevel, children }: RouteGuardProps)
       }, 2500);
       return () => clearTimeout(timer);
     }
-  }, [isLoaded, level1Completed, level2Completed, requiredLevel, router, playSound]);
+  }, [
+    isLoaded,
+    level1Completed,
+    level2Completed,
+    level3Completed,
+    requiredLevel,
+    router,
+    playSound,
+  ]);
 
   if (!isLoaded) {
     return (
