@@ -32,10 +32,27 @@ export default function VictoryPage() {
     });
   }, [playSound]);
 
-  const handleClaimWhatsApp = (type: "makan" | "eskrim" | "main") => {
+  const handleClaimWhatsApp = async (type: "makan" | "eskrim" | "main") => {
     playSound("click");
     setSelectedReward(type);
 
+    try {
+      const res = await fetch("/api/claim-reward", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reward: type }),
+      });
+      const data = await res.json();
+
+      if (data.whatsappUrl) {
+        window.open(data.whatsappUrl, "_blank");
+        return;
+      }
+    } catch {
+      // Fallback direct URL if fetch fails
+    }
+
+    const TARGET_PHONE = "6285869018682";
     let message = "";
     if (type === "makan") {
       message =
@@ -49,7 +66,7 @@ export default function VictoryPage() {
     }
 
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/${TARGET_PHONE}?text=${encoded}`, "_blank");
   };
 
   const handleReplay = () => {
