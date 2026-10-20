@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Volume2, VolumeX, RotateCcw, Check, Sparkles, Heart } from "lucide-react";
+import { Volume2, VolumeX, RotateCcw, Check, Heart } from "lucide-react";
 import { useGame } from "@/context/GameContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
