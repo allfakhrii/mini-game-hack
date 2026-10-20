@@ -51,7 +51,8 @@ export default function Level2Page() {
     setLoading(false);
 
     if (result.success) {
-      setSuccessMessage("Dekripsi terverifikasi! Hadiahmu siap dibuka.");
+      setSuccessMessage("Dekripsi terverifikasi! Membuka brankas hadiah...");
+      setIsTransitioning(true);
     } else {
       setErrorMessage("Teks belum cocok. Pastikan kamu menjalankan dekripsi Fernet dengan benar.");
     }

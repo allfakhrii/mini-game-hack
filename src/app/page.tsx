@@ -37,7 +37,8 @@ export default function Level1Page() {
     setLoading(false);
 
     if (result.success) {
-      setSuccessMessage("Sandi benar! Pintu ke tantangan berikutnya terbuka.");
+      setSuccessMessage("Sandi benar! Mengalihkan ke Level 2...");
+      setIsTransitioning(true);
     } else {
       setErrorMessage("Sandi belum cocok. Coba periksa kembali hasil pembacaan LSB di gambarmu.");
     }
