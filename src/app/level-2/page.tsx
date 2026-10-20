@@ -40,26 +40,21 @@ export default function Level2HashPage() {
   // Smooth GSAP Entrance Animation
   useGSAP(
     () => {
-      gsap.from(".anim-header", {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      });
-      gsap.from(".anim-left", {
-        y: 24,
-        opacity: 0,
-        duration: 0.7,
-        delay: 0.12,
-        ease: "power2.out",
-      });
-      gsap.from(".anim-right", {
-        y: 24,
-        opacity: 0,
-        duration: 0.7,
-        delay: 0.22,
-        ease: "power2.out",
-      });
+      gsap.fromTo(
+        ".anim-header",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", clearProps: "all" }
+      );
+      gsap.fromTo(
+        ".anim-left",
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, delay: 0.12, ease: "power2.out", clearProps: "all" }
+      );
+      gsap.fromTo(
+        ".anim-right",
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, delay: 0.22, ease: "power2.out", clearProps: "all" }
+      );
     },
     { scope: container }
   );

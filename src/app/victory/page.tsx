@@ -32,36 +32,32 @@ export default function VictoryPage() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".anim-header", {
-        y: 20,
-        opacity: 0,
-        duration: 0.7,
-      })
-        .from(
+      tl.fromTo(
+        ".anim-header",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, clearProps: "all" }
+      )
+        .fromTo(
           ".anim-letter",
-          {
-            y: 25,
-            opacity: 0,
-            duration: 0.7,
-          },
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, clearProps: "all" },
           "-=0.35"
         )
-        .from(
+        .fromTo(
           ".anim-reward-heading",
-          {
-            y: 15,
-            opacity: 0,
-            duration: 0.5,
-          },
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, clearProps: "all" },
           "-=0.3"
         )
-        .from(
+        .fromTo(
           ".anim-reward-card",
+          { y: 20, opacity: 0 },
           {
-            y: 20,
-            opacity: 0,
+            y: 0,
+            opacity: 1,
             duration: 0.5,
             stagger: 0.09,
+            clearProps: "all",
           },
           "-=0.2"
         );

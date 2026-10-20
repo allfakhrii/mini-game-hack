@@ -19,46 +19,39 @@ export default function StartPage() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".hero-badge", {
-        y: -15,
-        opacity: 0,
-        duration: 0.6,
-      })
-        .from(
+      tl.fromTo(
+        ".hero-badge",
+        { y: -15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, clearProps: "all" }
+      )
+        .fromTo(
           ".hero-title",
-          {
-            y: 25,
-            opacity: 0,
-            duration: 0.8,
-          },
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, clearProps: "all" },
           "-=0.3"
         )
-        .from(
+        .fromTo(
           ".hero-desc",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.7,
-          },
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, clearProps: "all" },
           "-=0.4"
         )
-        .from(
+        .fromTo(
           ".mission-card",
+          { y: 30, opacity: 0 },
           {
-            y: 30,
-            opacity: 0,
+            y: 0,
+            opacity: 1,
             duration: 0.6,
             stagger: 0.12,
+            clearProps: "all",
           },
           "-=0.3"
         )
-        .from(
+        .fromTo(
           ".cta-section",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, clearProps: "all" },
           "-=0.2"
         );
     },
@@ -109,7 +102,7 @@ export default function StartPage() {
       {/* 3 Mission Cards Preview with Spotlight */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-10 text-left">
         {/* Stage 1 */}
-        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Eye className="w-5 h-5" />
           </div>
@@ -126,7 +119,7 @@ export default function StartPage() {
         </SpotlightCard>
 
         {/* Stage 2 */}
-        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Binary className="w-5 h-5" />
           </div>
@@ -143,7 +136,7 @@ export default function StartPage() {
         </SpotlightCard>
 
         {/* Stage 3 */}
-        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Lock className="w-5 h-5" />
           </div>
