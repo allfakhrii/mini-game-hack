@@ -8,15 +8,19 @@ import {
   Utensils,
   IceCream,
   Compass,
+  Sparkles,
   MessageCircle,
   RotateCcw,
   CheckCircle2,
   Heart,
+  Send,
 } from "lucide-react";
 
 export default function VictoryPage() {
   const { playSound, resetGame } = useGame();
   const [selectedReward, setSelectedReward] = useState<string | null>(null);
+  const [customText, setCustomText] = useState("");
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
   useEffect(() => {
     playSound("victory");
@@ -32,7 +36,10 @@ export default function VictoryPage() {
     });
   }, [playSound]);
 
-  const handleClaimWhatsApp = async (type: "makan" | "eskrim" | "main") => {
+  const handleClaimWhatsApp = async (
+    type: "makan" | "eskrim" | "main" | "request",
+    customInputText?: string
+  ) => {
     playSound("click");
     setSelectedReward(type);
 
@@ -40,7 +47,10 @@ export default function VictoryPage() {
       const res = await fetch("/api/claim-reward", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reward: type }),
+        body: JSON.stringify({
+          reward: type,
+          customText: customInputText || customText,
+        }),
       });
       const data = await res.json();
 
@@ -63,6 +73,14 @@ export default function VictoryPage() {
     } else if (type === "main") {
       message =
         "Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Hadiah yang aku pilih: JALAN-JALAN MAIN berdua! Kapan kita berangkat?";
+    } else if (type === "request") {
+      const trimmed = (customInputText || customText).trim();
+      if (trimmed) {
+        message = `Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Untuk hadiahnya, aku mau REQUEST SENDIRI nih: "${trimmed}"! Bisa kan?`;
+      } else {
+        message =
+          "Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Untuk hadiahnya, aku mau REQUEST SENDIRI nih! Nanti aku kasih tahu detailnya ya hehe.";
+      }
     }
 
     const encoded = encodeURIComponent(message);
@@ -79,7 +97,7 @@ export default function VictoryPage() {
 
   return (
     <RouteGuard requiredLevel="victory">
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
+      <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 text-rose-300 rounded-full text-xs font-medium mb-3">
@@ -119,8 +137,9 @@ export default function VictoryPage() {
 
             <p className="text-slate-300">
               Karena kamu udah berhasil nyelesaiin misinya, sekarang waktunya reward. Kamu bebas
-              pilih mau hadiah apa: <strong>makan enak</strong>, <strong>jajan es krim</strong>, atau{" "}
-              <strong>jalan-jalan main</strong>? You name it, kasih tau aja ya.
+              pilih mau hadiah apa: <strong>makan enak</strong>, <strong>jajan es krim</strong>,{" "}
+              <strong>jalan-jalan main</strong>, atau <strong>request sendiri</strong>? You name it,
+              kasih tau aja ya.
             </p>
 
             <p className="pt-2 text-right text-xs text-rose-300 font-medium">
@@ -138,64 +157,151 @@ export default function VictoryPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            {/* Makan Enak */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* 1. Makan Enak */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
-                <div className="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-2.5">
                   <Utensils className="w-4 h-4" />
                 </div>
-                <h3 className="font-semibold text-slate-200 text-sm mb-1">Makan Enak</h3>
+                <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Makan Enak</h3>
+                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
+                  Kulineran makanan favoritmu.
+                </p>
               </div>
 
               <button
                 type="button"
-                onClick={() => handleClaimWhatsApp("makan")}
-                className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                onClick={() => {
+                  setShowCustomInput(false);
+                  handleClaimWhatsApp("makan");
+                }}
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Makan</span>
               </button>
             </div>
 
-            {/* Jajan Es Krim */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            {/* 2. Jajan Es Krim */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
-                <div className="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-3">
+                <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-2.5">
                   <IceCream className="w-4 h-4" />
                 </div>
-                <h3 className="font-semibold text-slate-200 text-sm mb-1">Jajan Es Krim</h3>
+                <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Jajan Es Krim</h3>
+                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
+                  Gelato, McFlurry, atau dessert manis.
+                </p>
               </div>
 
               <button
                 type="button"
-                onClick={() => handleClaimWhatsApp("eskrim")}
-                className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                onClick={() => {
+                  setShowCustomInput(false);
+                  handleClaimWhatsApp("eskrim");
+                }}
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Es Krim</span>
               </button>
             </div>
 
-            {/* Jalan-Jalan */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            {/* 3. Jalan-Jalan */}
+            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
-                <div className="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-2.5">
                   <Compass className="w-4 h-4" />
                 </div>
-                <h3 className="font-semibold text-slate-200 text-sm mb-1">Jalan-Jalan</h3>
+                <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Jalan-Jalan</h3>
+                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
+                  Bioskop, arcade date, atau jalan sore.
+                </p>
               </div>
 
               <button
                 type="button"
-                onClick={() => handleClaimWhatsApp("main")}
-                className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                onClick={() => {
+                  setShowCustomInput(false);
+                  handleClaimWhatsApp("main");
+                }}
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Jalan</span>
               </button>
             </div>
+
+            {/* 4. Request Sendiri */}
+            <div
+              className={`bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-colors ${
+                showCustomInput ? "border-purple-500/50 bg-purple-950/20" : "border-slate-800 hover:border-slate-700"
+              }`}
+            >
+              <div>
+                <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-2.5">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Request Sendiri</h3>
+                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
+                  Punya ide lain? Tulis sesukamu!
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCustomInput(!showCustomInput);
+                  setSelectedReward("request");
+                  playSound("click");
+                }}
+                className="w-full py-2 px-2.5 bg-purple-600/80 hover:bg-purple-600 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{showCustomInput ? "Tutup Form" : "Pilih Request"}</span>
+              </button>
+            </div>
           </div>
+
+          {/* Custom Request Input Box (Expandable) */}
+          {showCustomInput && (
+            <div className="p-4 bg-slate-900/80 border border-purple-500/30 rounded-xl space-y-2.5 animate-fade-in shadow-sm">
+              <label
+                htmlFor="custom-request-input"
+                className="block text-xs font-medium text-slate-200"
+              >
+                Tulis permintaan hadiahmu (bebas request apa aja ya!):
+              </label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  id="custom-request-input"
+                  type="text"
+                  value={customText}
+                  onChange={(e) => setCustomText(e.target.value)}
+                  placeholder="Contoh: Dimasakin makan malam, beliin buku, nonton konser, dll..."
+                  className="flex-1 bg-slate-950 border border-slate-700 focus:border-purple-500 rounded-lg px-3.5 py-2 text-xs text-slate-100 placeholder:text-slate-500 outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleClaimWhatsApp("request", customText);
+                    }
+                  }}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => handleClaimWhatsApp("request", customText)}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Kirim ke WA</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Pesan ini akan otomatis terisi di chat WhatsApp kamu dengan Al.
+              </p>
+            </div>
+          )}
 
           {selectedReward && (
             <p className="text-xs text-slate-400 text-center">

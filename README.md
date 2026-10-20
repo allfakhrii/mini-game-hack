@@ -108,7 +108,7 @@ Didesain dengan pendekatan editorial modern berstandar antislop (bersih, santai,
    - Audio synthesizer native menggunakan Web Audio API tanpa perlu aset eksternal.
 
 3. **Integrasi WhatsApp Langsung**:
-   - Endpoint API [`/api/claim-reward`](/api/claim-reward) dan tombol di halaman kemenangan langsung menghubungkan pemain ke kontak WhatsApp tujuan (**085869018682**) dengan pesan otomatis untuk 3 opsi hadiah: Makan Enak, Jajan Es Krim, atau Jalan-Jalan.
+   - Endpoint API [`/api/claim-reward`](/api/claim-reward) dan tombol di halaman kemenangan langsung menghubungkan pemain ke kontak WhatsApp tujuan (**085869018682**) dengan pesan otomatis untuk 4 opsi hadiah: Makan Enak, Jajan Es Krim, Jalan-Jalan, atau Request Sendiri (bebas tulis permintaan custom).
 
 ---
 

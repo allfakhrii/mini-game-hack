@@ -9,6 +9,8 @@ const REWARD_MESSAGES: Record<string, string> = {
     "Hai sayang! Tantangan CTF kamu resmi selesai aku pecahkan. Sekarang waktunya nagih janji: JAJAN ES KRIM! Kapan kita jalan?",
   main:
     "Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Hadiah yang aku pilih: JALAN-JALAN MAIN berdua! Kapan kita berangkat?",
+  request:
+    "Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Untuk hadiahnya, aku mau REQUEST SENDIRI nih! Nanti aku kasih tahu detailnya ya hehe.",
 };
 
 export async function POST(req: Request) {
@@ -16,10 +18,15 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const rewardType = (body.reward || "makan").toLowerCase();
 
-    const message =
-      REWARD_MESSAGES[rewardType] ||
-      body.customMessage ||
-      REWARD_MESSAGES.makan;
+    let message = body.customMessage;
+
+    if (!message) {
+      if (rewardType === "request" && body.customText && body.customText.trim()) {
+        message = `Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Untuk hadiahnya, aku mau REQUEST SENDIRI nih: "${body.customText.trim()}"! Bisa kan?`;
+      } else {
+        message = REWARD_MESSAGES[rewardType] || REWARD_MESSAGES.makan;
+      }
+    }
 
     const encodedText = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${TARGET_PHONE_NUMBER}?text=${encodedText}`;
@@ -39,12 +46,17 @@ export async function POST(req: Request) {
   }
 }
 
-// GET support for direct link redirection: /api/claim-reward?reward=makan
+// GET support for direct link redirection: /api/claim-reward?reward=request
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const rewardType = (searchParams.get("reward") || "makan").toLowerCase();
+  const customText = searchParams.get("text");
 
-  const message = REWARD_MESSAGES[rewardType] || REWARD_MESSAGES.makan;
+  let message = REWARD_MESSAGES[rewardType] || REWARD_MESSAGES.makan;
+  if (rewardType === "request" && customText && customText.trim()) {
+    message = `Hai sayang! Teka-teki CTF kamu berhasil aku selesaikan sampai tuntas. Untuk hadiahnya, aku mau REQUEST SENDIRI nih: "${customText.trim()}"! Bisa kan?`;
+  }
+
   const encodedText = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${TARGET_PHONE_NUMBER}?text=${encodedText}`;
 
