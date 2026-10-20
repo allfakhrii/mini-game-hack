@@ -142,7 +142,7 @@ export default function VictoryPage() {
     <RouteGuard requiredLevel="victory">
       <div
         ref={container}
-        className="max-w-3xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+        className="max-w-3xl mx-auto px-4 pt-20 sm:pt-24 pb-12 flex-1 flex flex-col justify-center font-sans"
       >
         {/* Header */}
         <div className="text-center mb-8 anim-header">

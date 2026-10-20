@@ -101,7 +101,7 @@ export default function Level1Page() {
   return (
     <div
       ref={container}
-      className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+      className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-12 flex-1 flex flex-col justify-center font-sans"
     >
       {isTransitioning && (
         <GlitchTransition title="Sandi Cocok, Lanjut Level 2" nextRoute="/level-2" />

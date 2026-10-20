@@ -120,7 +120,7 @@ export default function Level2HashPage() {
     <RouteGuard requiredLevel={2}>
       <div
         ref={container}
-        className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+        className="max-w-5xl mx-auto px-4 pt-20 sm:pt-24 pb-12 flex-1 flex flex-col justify-center font-sans"
       >
         {isTransitioning && (
           <GlitchTransition title="Hash Terpecahkan, Lanjut Level 3" nextRoute="/level-3" />
