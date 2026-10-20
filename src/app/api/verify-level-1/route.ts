@@ -22,14 +22,14 @@ export async function POST(req: Request) {
     if (validPasswords.includes(cleanInput)) {
       return NextResponse.json({
         success: true,
-        message: "AKSES DITERIMA! Bit LSB berhasil didekode. Kunci Level 2 terbuka.",
+        message: "AKSES DITERIMA! Bit LSB berhasil didekode. Pintu Level 2 terbuka buat kamu!",
         level: 2,
       });
     } else {
       return NextResponse.json(
         {
           success: false,
-          message: "AKSES DITOLAK! Sandi tidak cocok dengan bit tersembunyi pada gambar.",
+          message: "Sandi belum cocok nih. Coba periksa lagi hasil pembacaan LSB di fotonya ya.",
         },
         { status: 401 }
       );

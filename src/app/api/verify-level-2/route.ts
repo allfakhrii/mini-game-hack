@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (validAnswers.includes(cleanInput)) {
       return NextResponse.json({
         success: true,
-        message: "HASH TERPECAHKAN! Kata sandi cocok dengan hash target. Pintu Level 3 terbuka.",
+        message: "HASH TERPECAHKAN! Kata sandi cocok dengan hash target. Pintu Level 3 terbuka!",
         level: 3,
       });
     } else {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         {
           success: false,
           message:
-            "Kata sandi belum cocok. Pastikan hash MD5 dari kata yang kamu masukkan menghasilkan a0095443fbfe1b3ebf4225636a1f86b8.",
+            "Kata sandi belum cocok nih. Pastikan hash MD5 dari kata yang kamu masukkan menghasilkan a0095443fbfe1b3ebf4225636a1f86b8.",
         },
         { status: 401 }
       );

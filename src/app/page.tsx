@@ -87,21 +87,21 @@ export default function StartPage() {
       <div className="hero-badge mb-5 flex justify-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-medium">
           <Shield className="w-3.5 h-3.5 text-indigo-400" />
-          <span>Misi Khusus: Secret Vault Challenge</span>
+          <span>Mini Games Khusus Buat Caca</span>
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
         </div>
       </div>
 
       {/* Main Headline */}
       <h1 className="hero-title text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-100 max-w-2xl mx-auto leading-tight sm:leading-tight">
-        Bisakah Kamu Membuka Brankas Rahasia Ini?
+        Brankas Ini Sengaja Aku Bikin Khusus Buat Kamu, Caca.
       </h1>
 
       {/* Subtitle / Narrative */}
       <p className="hero-desc text-slate-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed">
-        Sebuah teka-teki keamanan siber interaktif yang dirancang khusus untuk menguji ketelitian
-        dan kemampuan decoding-mu. Pecahkan tiga lapis pertahanan untuk membuka pesan rahasia dan
-        mengklaim hadiahmu.
+        Di web ini ada 3 level teka-teki keamanan siber yang harus kamu pecahkan satu per satu.
+        Setiap level menyimpan petunjuk untuk membuka brankas rahasia di akhir. Kalau kamu berhasil
+        menembus semuanya, kamu berhak klaim hadiah langsung ke aku. Siap, sayang?
       </p>
 
       {/* 3 Mission Cards Preview */}
@@ -112,14 +112,14 @@ export default function StartPage() {
             <Eye className="w-5 h-5" />
           </div>
           <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
-            Tahap 01
+            Level 01
           </span>
           <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
-            Steganografi Citra
+            Steganografi Foto
           </h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Membongkar pesan biner yang disembunyikan di balik piksel foto tanpa merusak
-            tampilannya.
+            Aku menyembunyikan pesan rahasia di dalam piksel foto tanpa mengubah tampilannya. Coba
+            temukan pesan itu.
           </p>
         </div>
 
@@ -129,14 +129,14 @@ export default function StartPage() {
             <Binary className="w-5 h-5" />
           </div>
           <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
-            Tahap 02
+            Level 02
           </span>
           <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
             Hash Cracking
           </h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Menembus sidik jari digital satu arah MD5 menggunakan teknik serangan kamus (Dictionary
-            Attack).
+            Sandi target aku kunci pakai rumus satu arah MD5. Gunakan script dan daftar kata yang aku
+            sediakan untuk membongkarnya.
           </p>
         </div>
 
@@ -146,14 +146,14 @@ export default function StartPage() {
             <Lock className="w-5 h-5" />
           </div>
           <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
-            Tahap 03
+            Level 03
           </span>
           <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
             Kriptografi Fernet AES
           </h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Mendekripsi berkas berstandar militer AES-128 untuk membuka surat rahasia dan hadiah
-            akhir.
+            Dokumen rahasia yang aku kunci pakai cipher AES-128. Buka kuncinya menggunakan kunci
+            simetris yang sudah aku bocorkan.
           </p>
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function StartPage() {
         </button>
 
         <p className="text-xs text-slate-500 mt-2">
-          Siapkan terminal dan Python-mu. Permainan dimulai dari Level 1.
+          Tenang aja, di setiap level aku sudah siapin petunjuk script Python yang bisa kamu pakai.
         </p>
       </div>
     </div>

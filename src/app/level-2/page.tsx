@@ -81,11 +81,11 @@ export default function Level2HashPage() {
     setLoading(false);
 
     if (result.success) {
-      setSuccessMessage("Kata sandi cocok! Mengalihkan ke Level 3...");
+      setSuccessMessage("Pintar! Hash MD5 berhasil dipecahkan. Mengalihkan ke Level 3...");
       setIsTransitioning(true);
     } else {
       setErrorMessage(
-        "Kata sandi belum cocok. Pastikan hash MD5 dari kata tersebut sama persis dengan target."
+        "Kata sandi belum cocok nih. Pastikan hash MD5 dari kata tersebut sama persis dengan target ya."
       );
     }
   };
@@ -102,13 +102,13 @@ export default function Level2HashPage() {
         className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
       >
         {isTransitioning && (
-          <GlitchTransition title="Hash Berhasil Dipecahkan" nextRoute="/level-3" />
+          <GlitchTransition title="Hash Terpecahkan, Lanjut Level 3" nextRoute="/level-3" />
         )}
 
         {/* Top Header - Full Width */}
         <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-            Tantangan 2 dari 3: Hash Cracking
+            Level 2 buat Caca: Hash Cracking
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
             Membongkar Sidik Jari Digital Satu Arah
@@ -123,7 +123,7 @@ export default function Level2HashPage() {
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
                 <Binary className="w-4 h-4" />
-                <span>CATATAN SEJARAH & TEKNIS</span>
+                <span>CATATAN & PETUNJUK LEVEL 2</span>
               </div>
 
               <p>
@@ -142,11 +142,11 @@ export default function Level2HashPage() {
               </p>
 
               <div className="pt-1 text-slate-200 font-medium">
-                <span className="text-indigo-300 font-semibold">Misi untukmu:</span> Sistem keamanan
-                mencatat hash MD5 target di panel samping. Aku juga menyertakan file kamus kata rahasia
-                (<code className="text-indigo-300 font-mono text-xs">wordlist.txt</code>) yang berhasil
-                disadap. Gunakan script Python untuk mencari kata mana yang menghasilkan hash yang sama
-                persis, lalu masukkan ke kolom verifikasi!
+                <span className="text-indigo-300 font-semibold">Misi buat kamu:</span> Di panel
+                samping, aku pasang hash MD5 target. Aku juga sudah sediakan file wordlist.txt yang
+                berisi daftar kata calon kuncinya. Tugas kamu: jalankan script Python yang sudah aku
+                buatkan di petunjuk bawah untuk mencari kata mana yang menghasilkan hash tersebut.
+                Kalau sudah ketemu katanya, masukkan ke kolom verifikasi ya!
               </div>
             </div>
 
@@ -255,14 +255,14 @@ export default function Level2HashPage() {
                   htmlFor="cracked-word"
                   className="block text-xs font-medium text-slate-300 mb-1.5"
                 >
-                  Masukkan kata sandi hasil cracking
+                  Masukkan kata yang menghasilkan hash target
                 </label>
                 <input
                   id="cracked-word"
                   type="text"
                   value={wordInput}
                   onChange={(e) => setWordInput(e.target.value)}
-                  placeholder="Ketik kata yang cocok dari kamus..."
+                  placeholder="Ketik kata yang kamu temukan dari wordlist..."
                   className="w-full bg-slate-950 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none transition-colors"
                   disabled={loading || level2Completed}
                 />

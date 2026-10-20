@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Teka-Teki Buat Kamu: CTF Mini",
-  description: "Dua tantangan kecil buat kamu: steganografi gambar dan dekripsi berkas.",
+  title: "Teka-Teki Buat Caca: Secret Vault",
+  description: "Tiga level teka-teki keamanan siber yang sengaja dibuat khusus buat Caca.",
 };
 
 export default function RootLayout({
@@ -37,7 +37,7 @@ export default function RootLayout({
             <TerminalNavbar />
             <main className="flex-1 flex flex-col">{children}</main>
             <footer className="py-6 border-t border-slate-800/60 text-center text-xs text-slate-500 font-sans">
-              Dibuat khusus untuk kamu, selesaikan misinya dan klaim hadiahmu.
+              Dibuat khusus untuk Caca. Selesaikan misinya dan klaim hadiahmu ke aku.
             </footer>
           </div>
         </GameProvider>

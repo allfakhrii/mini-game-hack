@@ -81,10 +81,10 @@ export default function Level3CryptoPage() {
     setLoading(false);
 
     if (result.success) {
-      setSuccessMessage("Dekripsi terverifikasi! Membuka brankas hadiah...");
+      setSuccessMessage("Keren banget Caca! Dekripsi valid. Membuka brankas hadiah...");
       setIsTransitioning(true);
     } else {
-      setErrorMessage("Teks belum cocok. Pastikan kamu menjalankan dekripsi Fernet dengan benar.");
+      setErrorMessage("Teks belum cocok nih. Pastikan kamu menjalankan script dekripsi Fernet dengan benar ya.");
     }
   };
 
@@ -100,13 +100,13 @@ export default function Level3CryptoPage() {
         className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
       >
         {isTransitioning && (
-          <GlitchTransition title="Dekripsi Berhasil" nextRoute="/victory" />
+          <GlitchTransition title="Dekripsi Berhasil, Menuju Hadiah" nextRoute="/victory" />
         )}
 
         {/* Top Header - Full Width */}
         <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-            Tantangan 3 dari 3: Kriptografi Kunci Simetris
+            Level 3 (Final) buat Caca: Kriptografi Fernet AES
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
             Ketika Matematika Menjadi Brankas Tak Tertembus
@@ -121,7 +121,7 @@ export default function Level3CryptoPage() {
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
                 <Lock className="w-4 h-4" />
-                <span>CATATAN SEJARAH & TEKNIS</span>
+                <span>CATATAN & PETUNJUK LEVEL 3</span>
               </div>
 
               <p>
@@ -140,10 +140,11 @@ export default function Level3CryptoPage() {
               </p>
 
               <div className="pt-1 text-slate-200 font-medium">
-                <span className="text-indigo-300 font-semibold">Misi untukmu:</span> Karena kamu
-                orang spesial, kunci simetrisnya sudah dibocorkan di panel samping. Rancang script
-                Python untuk memasangkan kunci tersebut ke cipher, pulihkan isi dokumen aslinya, lalu
-                tempel hasilnya ke kolom di bawah ini!
+                <span className="text-indigo-300 font-semibold">Misi buat kamu:</span> Ini level
+                terakhir sebelum kamu bisa membuka brankas hadiah utama! Berkas hadiah.txt sudah aku
+                enkripsi rapat. Tapi khusus buat kamu, kunci simetrisnya sudah aku kasih di panel
+                samping. Jalankan script Python di bawah untuk mendekripsi isi berkasnya, lalu masukkan
+                teks hasil dekripsinya ke kolom verifikasi ya!
               </div>
             </div>
 
@@ -254,14 +255,14 @@ export default function Level3CryptoPage() {
                   htmlFor="decrypted-result"
                   className="block text-xs font-medium text-slate-300 mb-1.5"
                 >
-                  Tempel teks hasil dekripsi di sini
+                  Tempel teks hasil dekripsi hadiah.txt
                 </label>
                 <textarea
                   id="decrypted-result"
                   rows={3}
                   value={flagInput}
                   onChange={(e) => setFlagInput(e.target.value)}
-                  placeholder="Tempel teks atau baris pertama hasil dekripsi..."
+                  placeholder="Ketik atau tempel teks hasil dekripsi script..."
                   className="w-full bg-slate-950 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none transition-colors resize-none"
                   disabled={loading || level3Completed}
                 />

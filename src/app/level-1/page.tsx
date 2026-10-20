@@ -67,10 +67,10 @@ export default function Level1Page() {
     setLoading(false);
 
     if (result.success) {
-      setSuccessMessage("Sandi benar! Mengalihkan ke Level 2...");
+      setSuccessMessage("Pintar banget! Sandi cocok. Mengalihkan ke Level 2...");
       setIsTransitioning(true);
     } else {
-      setErrorMessage("Sandi belum cocok. Coba periksa kembali hasil pembacaan LSB di gambarmu.");
+      setErrorMessage("Sandi belum cocok nih. Coba periksa kembali hasil pembacaan LSB di fotomu ya.");
     }
   };
 
@@ -85,16 +85,16 @@ export default function Level1Page() {
       className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
     >
       {isTransitioning && (
-        <GlitchTransition title="Sandi Diterima" nextRoute="/level-2" />
+        <GlitchTransition title="Sandi Cocok, Lanjut Level 2" nextRoute="/level-2" />
       )}
 
       {/* Top Header - Full Width */}
       <div className="mb-8 anim-header">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-          Tantangan 1 dari 3: Steganografi
+          Level 1 buat Caca: Steganografi LSB
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
-          Seni Menyembunyikan Brankas di Tempat Terbuka
+          Seni Menyembunyikan Pesan di Tempat Terbuka
         </h1>
       </div>
 
@@ -106,7 +106,7 @@ export default function Level1Page() {
           <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
             <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
               <BookOpen className="w-4 h-4" />
-              <span>CATATAN SEJARAH & TEKNIS</span>
+              <span>CATATAN & PETUNJUK LEVEL 1</span>
             </div>
 
             <p>
@@ -123,10 +123,10 @@ export default function Level1Page() {
             </p>
 
             <div className="pt-1 text-slate-200 font-medium">
-              <span className="text-indigo-300 font-semibold">Misi untukmu:</span> Gambar di
-              samping adalah sebuah brankas transparan. Gunakan tool atau online decoder
-              Steganografi (LSB) untuk mengekstrak isinya. Balas pesan ini kalau kamu berhasil
-              memecahkan apa kalimat rahasia yang aku sembunyikan di dalamnya!
+              <span className="text-indigo-300 font-semibold">Misi buat kamu:</span> Foto di
+              samping kelihatan biasa saja kan? Padahal di dalamnya sudah aku sisipkan sebuah kalimat
+              rahasia. Gunakan tool online atau script Python LSB yang aku sertakan di bawah untuk
+              mengekstrak isinya. Kalau sudah dapat kalimatnya, masukkan ke kolom verifikasi ya!
             </div>
           </div>
 
@@ -205,14 +205,14 @@ export default function Level1Page() {
                 htmlFor="stegano-password"
                 className="block text-xs font-medium text-slate-300 mb-1.5"
               >
-                Masukkan sandi yang kamu temukan
+                Masukkan kalimat rahasia yang kamu temukan
               </label>
               <input
                 id="stegano-password"
                 type="text"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ketik kalimat rahasia hasil decode..."
+                placeholder="Ketik kalimat rahasia hasil decode foto..."
                 className="w-full bg-slate-950 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none transition-colors"
                 disabled={loading || level1Completed}
               />

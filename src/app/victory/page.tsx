@@ -150,14 +150,14 @@ export default function VictoryPage() {
         <div className="text-center mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 text-rose-300 rounded-full text-xs font-medium mb-3">
             <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
-            <span>Semua Tantangan Selesai</span>
+            <span>Spesial Buat Caca</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-100">
-            Keren banget, kamu berhasil!
+            Keren banget, kamu berhasil Caca!
           </h1>
           <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto leading-relaxed">
-            Foto sudah terbongkar, berkas sudah terdekripsi, dan isi brankas resmi terbuka buat kamu.
+            Semua pertahanan brankas berhasil kamu tembus. Sekarang waktunya kamu nagih janji hadiah ke aku.
           </p>
         </div>
 
@@ -179,8 +179,8 @@ export default function VictoryPage() {
             <p>
               Selamat sayang, kamu berhasil nembus pertahanan brankas ini! Udah valid lah ya sekarang
               gelar hacker-nya wkwk. Keren banget kamu bisa mecahin teka-tekinya sampai titik akhir
-              (meskipun agak curiga nih pakai bantuan AI apa nggak). Terlepas dari itu, aku jujur
-              bangga banget ngeliat kamu bisa sampai sejauh ini.
+              (meskipun agak curiga nih kamu pakai bantuan AI apa nggak hehe). Terlepas dari itu, aku
+              jujur bangga banget sama kamu.
             </p>
 
             <p className="text-slate-300">
@@ -191,7 +191,7 @@ export default function VictoryPage() {
             </p>
 
             <p className="pt-2 text-right text-xs text-rose-300 font-medium">
-              Once again, you did a great job and I&apos;m so proud of you babe!
+              Once again, you did a great job and I&apos;m so proud of you, Caca!
             </p>
           </div>
         </div>

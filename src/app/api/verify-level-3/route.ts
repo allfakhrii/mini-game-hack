@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (isMatch) {
       return NextResponse.json({
         success: true,
-        message: "BRANKAS TERBUKA PENUH! Semua tantangan telah kamu taklukkan.",
+        message: "BRANKAS TERBUKA PENUH! Semua tantangan berhasil kamu taklukkan, Caca!",
         victory: true,
       });
     } else {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         {
           success: false,
           message:
-            "Teks tidak cocok dengan dekripsi brankas. Pastikan kamu menjalankan decryptor Fernet dengan benar.",
+            "Teks belum cocok dengan isi brankas. Pastikan kamu menjalankan decryptor Fernet dengan benar ya.",
         },
         { status: 401 }
       );

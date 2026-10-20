@@ -36,7 +36,7 @@ export default function TerminalNavbar() {
           className="font-medium text-slate-200 hover:text-white transition-colors flex items-center gap-2"
         >
           <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" />
-          <span className="tracking-tight text-sm font-semibold">Teka-Teki CTF</span>
+          <span className="tracking-tight text-sm font-semibold">Teka-Teki Buat Caca</span>
         </Link>
 
         {/* Level Steps */}
