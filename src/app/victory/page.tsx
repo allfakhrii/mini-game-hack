@@ -17,6 +17,8 @@ import {
   Heart,
   Send,
 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import ScrambleText from "@/components/ScrambleText";
 
 export default function VictoryPage() {
   const container = useRef<HTMLDivElement>(null);
@@ -150,7 +152,7 @@ export default function VictoryPage() {
         <div className="text-center mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 text-rose-300 rounded-full text-xs font-medium mb-3">
             <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
-            <span>Spesial Buat Caca</span>
+            <ScrambleText text="Spesial Buat Caca" speed={25} />
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-100">
@@ -161,8 +163,8 @@ export default function VictoryPage() {
           </p>
         </div>
 
-        {/* Decrypted Letter Card */}
-        <div className="anim-letter bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-sm mb-8 space-y-4">
+        {/* Decrypted Letter Card with Spotlight */}
+        <SpotlightCard className="anim-letter bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-sm mb-8 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 text-xs">
             <span className="font-semibold text-slate-300">Pesan dari Dalam Brankas</span>
             <span className="flex items-center gap-1 text-emerald-400">
@@ -172,8 +174,8 @@ export default function VictoryPage() {
           </div>
 
           <div className="space-y-3.5 text-sm text-slate-200 leading-relaxed">
-            <p className="font-mono text-xs font-semibold text-indigo-300">
-              ACCESS GRANTED!
+            <p className="font-mono text-xs font-semibold text-indigo-300 tracking-wider">
+              <ScrambleText text="ACCESS GRANTED!" speed={25} />
             </p>
 
             <p>
@@ -194,7 +196,7 @@ export default function VictoryPage() {
               Once again, you did a great job and I&apos;m so proud of you, Caca!
             </p>
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* Rewards Section */}
         <div className="space-y-4 mb-8">
@@ -207,7 +209,7 @@ export default function VictoryPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* 1. Makan Enak */}
-            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-2.5">
                   <Utensils className="w-4 h-4" />
@@ -224,15 +226,15 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("makan");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Makan</span>
               </button>
-            </div>
+            </SpotlightCard>
 
             {/* 2. Jajan Es Krim */}
-            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-2.5">
                   <IceCream className="w-4 h-4" />
@@ -249,15 +251,15 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("eskrim");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Es Krim</span>
               </button>
-            </div>
+            </SpotlightCard>
 
             {/* 3. Jalan-Jalan */}
-            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-2.5">
                   <Compass className="w-4 h-4" />
@@ -274,16 +276,16 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("main");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Jalan</span>
               </button>
-            </div>
+            </SpotlightCard>
 
             {/* 4. Request Sendiri */}
-            <div
-              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-colors ${
+            <SpotlightCard
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${
                 showCustomInput ? "border-purple-500/50 bg-purple-950/20" : "border-slate-800 hover:border-slate-700"
               }`}
             >
@@ -304,12 +306,12 @@ export default function VictoryPage() {
                   setSelectedReward("request");
                   playSound("click");
                 }}
-                className="w-full py-2 px-2.5 bg-purple-600/80 hover:bg-purple-600 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
+                className="w-full py-2 px-2.5 bg-purple-600/80 hover:bg-purple-600 active:scale-98 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{showCustomInput ? "Tutup Form" : "Pilih Request"}</span>
               </button>
-            </div>
+            </SpotlightCard>
           </div>
 
           {/* Custom Request Input Box (Expandable) */}
@@ -346,7 +348,7 @@ export default function VictoryPage() {
                 </button>
               </div>
               <p className="text-[11px] text-slate-400">
-                Pesan ini akan otomatis terisi di chat WhatsApp kamu dengan Al.
+                Pesan ini akan otomatis terisi di chat WhatsApp kamu ke aku.
               </p>
             </div>
           )}

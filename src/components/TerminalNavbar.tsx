@@ -108,7 +108,7 @@ export default function TerminalNavbar() {
           <button
             onClick={toggleSound}
             aria-label={soundEnabled ? "Matikan suara efek" : "Nyalakan suara efek"}
-            className="p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
+            className="p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 active:scale-90 transition-all"
           >
             {soundEnabled ? (
               <Volume2 className="w-4 h-4 text-slate-300" />
@@ -120,7 +120,7 @@ export default function TerminalNavbar() {
           {(level1Completed || level2Completed || level3Completed) && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors text-xs"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 active:scale-95 transition-all text-xs"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Ulangi</span>

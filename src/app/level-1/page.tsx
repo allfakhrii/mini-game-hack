@@ -13,12 +13,15 @@ import {
   ArrowRight,
   Code2,
   ChevronDown,
-  ChevronUp,
   BookOpen,
 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import ScrambleText from "@/components/ScrambleText";
 
 export default function Level1Page() {
   const container = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const accordionRef = useRef<HTMLDivElement>(null);
   const { verifyLevel1, level1Completed, playSound } = useGame();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,10 +71,31 @@ export default function Level1Page() {
 
     if (result.success) {
       setSuccessMessage("Pintar banget! Sandi cocok. Mengalihkan ke Level 2...");
+      if (inputRef.current) {
+        gsap.fromTo(
+          inputRef.current,
+          { scale: 1.02, borderColor: "#10b981" },
+          { scale: 1, duration: 0.4, ease: "power2.out" }
+        );
+      }
       setIsTransitioning(true);
     } else {
       setErrorMessage("Sandi belum cocok nih. Coba periksa kembali hasil pembacaan LSB di fotomu ya.");
+      if (inputRef.current) {
+        gsap
+          .timeline()
+          .to(inputRef.current, { x: -8, duration: 0.05 })
+          .to(inputRef.current, { x: 8, duration: 0.05 })
+          .to(inputRef.current, { x: -6, duration: 0.05 })
+          .to(inputRef.current, { x: 6, duration: 0.05 })
+          .to(inputRef.current, { x: 0, duration: 0.05 });
+      }
     }
+  };
+
+  const toggleHint = () => {
+    playSound("click");
+    setShowHint((prev) => !prev);
   };
 
   const handleNextLevel = () => {
@@ -91,7 +115,7 @@ export default function Level1Page() {
       {/* Top Header - Full Width */}
       <div className="mb-8 anim-header">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-          Level 1 buat Caca: Steganografi LSB
+          <ScrambleText text="Level 1 buat Caca: Steganografi LSB" speed={25} />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
           Seni Menyembunyikan Pesan di Tempat Terbuka
@@ -103,7 +127,7 @@ export default function Level1Page() {
         {/* Left Column: Story & Insight + Script Helper */}
         <div className="lg:col-span-7 space-y-5 anim-left">
           {/* Story Card */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
+          <SpotlightCard className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
             <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
               <BookOpen className="w-4 h-4" />
               <span>CATATAN & PETUNJUK LEVEL 1</span>
@@ -128,30 +152,32 @@ export default function Level1Page() {
               rahasia. Gunakan tool online atau script Python LSB yang aku sertakan di bawah untuk
               mengekstrak isinya. Kalau sudah dapat kalimatnya, masukkan ke kolom verifikasi ya!
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* Python Helper Box */}
           <div className="border border-slate-800/90 rounded-2xl bg-slate-900/40 overflow-hidden text-xs shadow-sm">
             <button
               type="button"
-              onClick={() => {
-                playSound("click");
-                setShowHint(!showHint);
-              }}
+              onClick={toggleHint}
               className="w-full flex items-center justify-between p-4 text-slate-300 hover:text-white transition-colors"
             >
               <span className="flex items-center gap-2 font-medium">
                 <Code2 className="w-4 h-4 text-indigo-400" />
                 <span>Petunjuk script Python (LSB Decode)</span>
               </span>
-              {showHint ? (
-                <ChevronUp className="w-4 h-4 text-slate-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-slate-400" />
-              )}
+              <ChevronDown
+                className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+                  showHint ? "rotate-180 text-indigo-400" : ""
+                }`}
+              />
             </button>
 
-            {showHint && (
+            <div
+              ref={accordionRef}
+              className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                showHint ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
               <div className="px-4 pb-4 border-t border-slate-800/60 text-slate-300 space-y-2">
                 <p className="text-xs text-slate-400 pt-2">
                   Kamu bisa menggunakan library <code className="text-indigo-300 font-mono">stegano</code> untuk
@@ -161,20 +187,20 @@ export default function Level1Page() {
                   <code>{`pip install stegano\npython -c "from stegano import lsb; print(lsb.reveal('stegano.png'))"`}</code>
                 </pre>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
         {/* Right Column: Photo Target + Action & Input Form */}
-        <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
+        <SpotlightCard className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
           {/* Photo Display with Natural Frame */}
           <div className="space-y-3">
-            <div className="relative rounded-xl overflow-hidden bg-slate-950 aspect-[4/3] w-full border border-slate-800">
+            <div className="relative rounded-xl overflow-hidden bg-slate-950 aspect-[4/3] w-full border border-slate-800 group">
               <Image
                 src="/stegano.png"
                 alt="Foto target steganografi LSB"
                 fill
-                className="object-cover"
+                className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 sizes="(max-width: 1024px) 100vw, 420px"
                 priority
               />
@@ -189,7 +215,7 @@ export default function Level1Page() {
               href="/stegano.png"
               download="stegano.png"
               onClick={() => playSound("click")}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:shadow-indigo-600/20 active:scale-98 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
             >
               <Download className="w-4 h-4" />
               <span>Unduh Foto Asli (Raw .PNG)</span>
@@ -208,6 +234,7 @@ export default function Level1Page() {
                 Masukkan kalimat rahasia yang kamu temukan
               </label>
               <input
+                ref={inputRef}
                 id="stegano-password"
                 type="text"
                 value={password}
@@ -253,7 +280,7 @@ export default function Level1Page() {
               </button>
             )}
           </form>
-        </div>
+        </SpotlightCard>
       </div>
     </div>
   );

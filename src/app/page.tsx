@@ -6,6 +6,8 @@ import { useGame } from "@/context/GameContext";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Eye, Binary, Lock, ArrowRight, Shield, Sparkles } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import ScrambleText from "@/components/ScrambleText";
 
 export default function StartPage() {
   const router = useRouter();
@@ -87,7 +89,7 @@ export default function StartPage() {
       <div className="hero-badge mb-5 flex justify-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-medium">
           <Shield className="w-3.5 h-3.5 text-indigo-400" />
-          <span>Mini Games Khusus Buat Caca</span>
+          <ScrambleText text="Mini Games Khusus Buat Caca" speed={25} />
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
         </div>
       </div>
@@ -104,10 +106,10 @@ export default function StartPage() {
         menembus semuanya, kamu berhak klaim hadiah langsung ke aku. Siap, sayang?
       </p>
 
-      {/* 3 Mission Cards Preview */}
+      {/* 3 Mission Cards Preview with Spotlight */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-10 text-left">
         {/* Stage 1 */}
-        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Eye className="w-5 h-5" />
           </div>
@@ -121,10 +123,10 @@ export default function StartPage() {
             Aku menyembunyikan pesan rahasia di dalam piksel foto tanpa mengubah tampilannya. Coba
             temukan pesan itu.
           </p>
-        </div>
+        </SpotlightCard>
 
         {/* Stage 2 */}
-        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Binary className="w-5 h-5" />
           </div>
@@ -138,10 +140,10 @@ export default function StartPage() {
             Sandi target aku kunci pakai rumus satu arah MD5. Gunakan script dan daftar kata yang aku
             sediakan untuk membongkarnya.
           </p>
-        </div>
+        </SpotlightCard>
 
         {/* Stage 3 */}
-        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+        <SpotlightCard className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
             <Lock className="w-5 h-5" />
           </div>
@@ -155,7 +157,7 @@ export default function StartPage() {
             Dokumen rahasia yang aku kunci pakai cipher AES-128. Buka kuncinya menggunakan kunci
             simetris yang sudah aku bocorkan.
           </p>
-        </div>
+        </SpotlightCard>
       </div>
 
       {/* Start Button CTA */}

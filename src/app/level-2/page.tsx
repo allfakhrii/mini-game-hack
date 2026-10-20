@@ -15,14 +15,17 @@ import {
   ArrowRight,
   Code2,
   ChevronDown,
-  ChevronUp,
   FileText,
   Hash,
   Binary,
 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import ScrambleText from "@/components/ScrambleText";
 
 export default function Level2HashPage() {
   const container = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const copyBtnRef = useRef<HTMLButtonElement>(null);
   const { verifyLevel2, level2Completed, playSound } = useGame();
   const [wordInput, setWordInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -65,6 +68,13 @@ export default function Level2HashPage() {
     playSound("click");
     navigator.clipboard.writeText(TARGET_HASH);
     setCopiedHash(true);
+    if (copyBtnRef.current) {
+      gsap.fromTo(
+        copyBtnRef.current,
+        { scale: 0.95 },
+        { scale: 1, duration: 0.3, ease: "back.out(2)" }
+      );
+    }
     setTimeout(() => setCopiedHash(false), 2000);
   };
 
@@ -82,11 +92,27 @@ export default function Level2HashPage() {
 
     if (result.success) {
       setSuccessMessage("Pintar! Hash MD5 berhasil dipecahkan. Mengalihkan ke Level 3...");
+      if (inputRef.current) {
+        gsap.fromTo(
+          inputRef.current,
+          { scale: 1.02, borderColor: "#10b981" },
+          { scale: 1, duration: 0.4, ease: "power2.out" }
+        );
+      }
       setIsTransitioning(true);
     } else {
       setErrorMessage(
         "Kata sandi belum cocok nih. Pastikan hash MD5 dari kata tersebut sama persis dengan target ya."
       );
+      if (inputRef.current) {
+        gsap
+          .timeline()
+          .to(inputRef.current, { x: -8, duration: 0.05 })
+          .to(inputRef.current, { x: 8, duration: 0.05 })
+          .to(inputRef.current, { x: -6, duration: 0.05 })
+          .to(inputRef.current, { x: 6, duration: 0.05 })
+          .to(inputRef.current, { x: 0, duration: 0.05 });
+      }
     }
   };
 
@@ -108,7 +134,7 @@ export default function Level2HashPage() {
         {/* Top Header - Full Width */}
         <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-            Level 2 buat Caca: Hash Cracking
+            <ScrambleText text="Level 2 buat Caca: Hash Cracking" speed={25} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
             Membongkar Sidik Jari Digital Satu Arah
@@ -120,7 +146,7 @@ export default function Level2HashPage() {
           {/* Left Column: Insight & Python Helper */}
           <div className="lg:col-span-7 space-y-5 anim-left">
             {/* Story Card */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
+            <SpotlightCard className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
                 <Binary className="w-4 h-4" />
                 <span>CATATAN & PETUNJUK LEVEL 2</span>
@@ -148,7 +174,7 @@ export default function Level2HashPage() {
                 buatkan di petunjuk bawah untuk mencari kata mana yang menghasilkan hash tersebut.
                 Kalau sudah ketemu katanya, masukkan ke kolom verifikasi ya!
               </div>
-            </div>
+            </SpotlightCard>
 
             {/* Python Helper Box */}
             <div className="border border-slate-800/90 rounded-2xl bg-slate-900/40 overflow-hidden text-xs shadow-sm">
@@ -164,14 +190,18 @@ export default function Level2HashPage() {
                   <Code2 className="w-4 h-4 text-indigo-400" />
                   <span>Petunjuk script Python (Dictionary Attack)</span>
                 </span>
-                {showHelper ? (
-                  <ChevronUp className="w-4 h-4 text-slate-400" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-slate-400" />
-                )}
+                <ChevronDown
+                  className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+                    showHelper ? "rotate-180 text-indigo-400" : ""
+                  }`}
+                />
               </button>
 
-              {showHelper && (
+              <div
+                className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                  showHelper ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="px-4 pb-4 border-t border-slate-800/60 text-slate-300 space-y-2">
                   <p className="text-xs text-slate-400 pt-2">
                     Jalankan script Python sederhana ini di folder tempat kamu menyimpan wordlist:
@@ -180,12 +210,12 @@ export default function Level2HashPage() {
                     <code>{`import hashlib\n\ntarget_hash = "${TARGET_HASH}"\n\nwith open("wordlist.txt", "r") as file:\n    for line in file:\n        kata = line.strip()\n        if hashlib.md5(kata.encode()).hexdigest() == target_hash:\n            print(f"Password ditemukan: {kata}")\n            break`}</code>
                   </pre>
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
           {/* Right Column: Hash Target, Wordlist, & Input Form */}
-          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
+          <SpotlightCard className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
             {/* Target Hash Card */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between text-xs text-slate-300">
@@ -197,15 +227,20 @@ export default function Level2HashPage() {
               </div>
 
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                <code className="text-xs font-mono text-slate-200 block truncate select-all">
-                  {TARGET_HASH}
+                <code className="text-xs font-mono text-indigo-300 block truncate select-all tracking-wider">
+                  <ScrambleText
+                    text={TARGET_HASH}
+                    speed={18}
+                    scrambleChars="0123456789abcdef"
+                  />
                 </code>
               </div>
 
               <button
+                ref={copyBtnRef}
                 type="button"
                 onClick={handleCopyHash}
-                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 text-xs font-medium rounded-lg transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 {copiedHash ? (
                   <>
@@ -239,7 +274,7 @@ export default function Level2HashPage() {
                 href="/wordlist.txt"
                 download="wordlist.txt"
                 onClick={() => playSound("click")}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white text-xs font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:shadow-indigo-600/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Unduh wordlist.txt</span>
@@ -258,6 +293,7 @@ export default function Level2HashPage() {
                   Masukkan kata yang menghasilkan hash target
                 </label>
                 <input
+                  ref={inputRef}
                   id="cracked-word"
                   type="text"
                   value={wordInput}
@@ -303,7 +339,7 @@ export default function Level2HashPage() {
                 </button>
               )}
             </form>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </RouteGuard>

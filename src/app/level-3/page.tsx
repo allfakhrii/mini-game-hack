@@ -16,13 +16,16 @@ import {
   ArrowRight,
   Code2,
   ChevronDown,
-  ChevronUp,
   FileText,
   Lock,
 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import ScrambleText from "@/components/ScrambleText";
 
 export default function Level3CryptoPage() {
   const container = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const copyKeyBtnRef = useRef<HTMLButtonElement>(null);
   const { verifyLevel3, level3Completed, playSound } = useGame();
   const [flagInput, setFlagInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -65,6 +68,13 @@ export default function Level3CryptoPage() {
     playSound("click");
     navigator.clipboard.writeText(FERNET_KEY);
     setCopiedKey(true);
+    if (copyKeyBtnRef.current) {
+      gsap.fromTo(
+        copyKeyBtnRef.current,
+        { scale: 0.95 },
+        { scale: 1, duration: 0.3, ease: "back.out(2)" }
+      );
+    }
     setTimeout(() => setCopiedKey(false), 2000);
   };
 
@@ -82,9 +92,25 @@ export default function Level3CryptoPage() {
 
     if (result.success) {
       setSuccessMessage("Keren banget Caca! Dekripsi valid. Membuka brankas hadiah...");
+      if (textareaRef.current) {
+        gsap.fromTo(
+          textareaRef.current,
+          { scale: 1.02, borderColor: "#10b981" },
+          { scale: 1, duration: 0.4, ease: "power2.out" }
+        );
+      }
       setIsTransitioning(true);
     } else {
       setErrorMessage("Teks belum cocok nih. Pastikan kamu menjalankan script dekripsi Fernet dengan benar ya.");
+      if (textareaRef.current) {
+        gsap
+          .timeline()
+          .to(textareaRef.current, { x: -8, duration: 0.05 })
+          .to(textareaRef.current, { x: 8, duration: 0.05 })
+          .to(textareaRef.current, { x: -6, duration: 0.05 })
+          .to(textareaRef.current, { x: 6, duration: 0.05 })
+          .to(textareaRef.current, { x: 0, duration: 0.05 });
+      }
     }
   };
 
@@ -106,7 +132,7 @@ export default function Level3CryptoPage() {
         {/* Top Header - Full Width */}
         <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-            Level 3 (Final) buat Caca: Kriptografi Fernet AES
+            <ScrambleText text="Level 3 (Final) buat Caca: Kriptografi Fernet AES" speed={25} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
             Ketika Matematika Menjadi Brankas Tak Tertembus
@@ -118,7 +144,7 @@ export default function Level3CryptoPage() {
           {/* Left Column: Insight & Python Helper */}
           <div className="lg:col-span-7 space-y-5 anim-left">
             {/* Story Card */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
+            <SpotlightCard className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
                 <Lock className="w-4 h-4" />
                 <span>CATATAN & PETUNJUK LEVEL 3</span>
@@ -146,7 +172,7 @@ export default function Level3CryptoPage() {
                 samping. Jalankan script Python di bawah untuk mendekripsi isi berkasnya, lalu masukkan
                 teks hasil dekripsinya ke kolom verifikasi ya!
               </div>
-            </div>
+            </SpotlightCard>
 
             {/* Python Script Accordion */}
             <div className="border border-slate-800/90 rounded-2xl bg-slate-900/40 overflow-hidden text-xs shadow-sm">
@@ -162,14 +188,18 @@ export default function Level3CryptoPage() {
                   <Code2 className="w-4 h-4 text-indigo-400" />
                   <span>Template script dekripsi Python</span>
                 </span>
-                {showHelper ? (
-                  <ChevronUp className="w-4 h-4 text-slate-400" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-slate-400" />
-                )}
+                <ChevronDown
+                  className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${
+                    showHelper ? "rotate-180 text-indigo-400" : ""
+                  }`}
+                />
               </button>
 
-              {showHelper && (
+              <div
+                className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                  showHelper ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="px-4 pb-4 border-t border-slate-800/60 text-slate-300 space-y-2">
                   <p className="text-xs text-slate-400 pt-2">
                     Jalankan script berikut di terminal di direktori berkas yang kamu unduh:
@@ -178,12 +208,12 @@ export default function Level3CryptoPage() {
                     <code>{`from cryptography.fernet import Fernet\n\nkunci = b"${FERNET_KEY}"\ncipher = Fernet(kunci)\n\nwith open("hadiah.txt", "rb") as f:\n    hasil = cipher.decrypt(f.read())\n    print(hasil.decode())`}</code>
                   </pre>
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
           {/* Right Column: Encrypted File, Key, & Input Form */}
-          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
+          <SpotlightCard className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
             {/* Download File */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between text-xs text-slate-300">
@@ -204,7 +234,7 @@ export default function Level3CryptoPage() {
                 href="/hadiah.txt"
                 download="hadiah.txt"
                 onClick={() => playSound("click")}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white text-xs font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:shadow-indigo-600/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Unduh hadiah.txt</span>
@@ -222,15 +252,16 @@ export default function Level3CryptoPage() {
               </div>
 
               <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                <code className="text-xs font-mono text-slate-200 block truncate select-all">
-                  {FERNET_KEY}
+                <code className="text-xs font-mono text-indigo-300 block truncate select-all tracking-wider">
+                  <ScrambleText text={FERNET_KEY} speed={16} />
                 </code>
               </div>
 
               <button
+                ref={copyKeyBtnRef}
                 type="button"
                 onClick={handleCopyKey}
-                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 text-xs font-medium rounded-lg transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 {copiedKey ? (
                   <>
@@ -303,7 +334,7 @@ export default function Level3CryptoPage() {
                 </button>
               )}
             </form>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </RouteGuard>
