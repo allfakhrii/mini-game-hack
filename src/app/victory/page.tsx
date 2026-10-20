@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import RouteGuard from "@/components/RouteGuard";
 import { useGame } from "@/context/GameContext";
 import confetti from "canvas-confetti";
@@ -16,6 +16,11 @@ import {
   CheckCircle2,
   Heart,
   Send,
+  PartyPopper,
+  Trophy,
+  ShieldCheck,
+  Binary,
+  Lock,
 } from "lucide-react";
 import SpotlightCard from "@/components/SpotlightCard";
 import ScrambleText from "@/components/ScrambleText";
@@ -27,21 +32,69 @@ export default function VictoryPage() {
   const [customText, setCustomText] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
 
+  // Grand multi-burst confetti celebration sequence
+  const triggerCelebration = useCallback(() => {
+    playSound("victory");
+
+    // Left cannon burst
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 65,
+      origin: { x: 0.05, y: 0.75 },
+      colors: ["#6366f1", "#ec4899", "#f43f5e", "#fbbf24", "#10b981"],
+      zIndex: 9999,
+    });
+
+    // Right cannon burst
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 65,
+      origin: { x: 0.95, y: 0.75 },
+      colors: ["#6366f1", "#ec4899", "#f43f5e", "#fbbf24", "#10b981"],
+      zIndex: 9999,
+    });
+
+    // Center starburst slightly delayed
+    setTimeout(() => {
+      confetti({
+        particleCount: 110,
+        spread: 100,
+        origin: { x: 0.5, y: 0.4 },
+        colors: ["#f43f5e", "#ec4899", "#818cf8", "#38bdf8", "#fbbf24"],
+        zIndex: 9999,
+      });
+    }, 280);
+  }, [playSound]);
+
   // Smooth GSAP Entrance Animation
   useGSAP(
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.fromTo(
-        ".anim-header",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, clearProps: "all" }
+        ".anim-trophy",
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(2)", clearProps: "all" }
       )
+        .fromTo(
+          ".anim-header",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, clearProps: "all" },
+          "-=0.3"
+        )
+        .fromTo(
+          ".anim-badges",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, clearProps: "all" },
+          "-=0.3"
+        )
         .fromTo(
           ".anim-letter",
           { y: 25, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.7, clearProps: "all" },
-          "-=0.35"
+          "-=0.3"
         )
         .fromTo(
           ".anim-reward-heading",
@@ -56,7 +109,7 @@ export default function VictoryPage() {
             y: 0,
             opacity: 1,
             duration: 0.5,
-            stagger: 0.09,
+            stagger: 0.08,
             clearProps: "all",
           },
           "-=0.2"
@@ -66,18 +119,8 @@ export default function VictoryPage() {
   );
 
   useEffect(() => {
-    playSound("victory");
-
-    // Gentle confetti celebration
-    const count = 120;
-    confetti({
-      origin: { y: 0.6 },
-      zIndex: 9999,
-      particleCount: count,
-      spread: 70,
-      colors: ["#f43f5e", "#ec4899", "#818cf8", "#38bdf8"],
-    });
-  }, [playSound]);
+    triggerCelebration();
+  }, [triggerCelebration]);
 
   const handleClaimWhatsApp = async (
     type: "makan" | "eskrim" | "main" | "request",
@@ -85,6 +128,15 @@ export default function VictoryPage() {
   ) => {
     playSound("click");
     setSelectedReward(type);
+
+    // Mini localized confetti burst for tactile reward feedback
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { y: 0.8 },
+      zIndex: 9999,
+      colors: ["#10b981", "#6366f1", "#ec4899"],
+    });
 
     try {
       const res = await fetch("/api/claim-reward", {
@@ -142,30 +194,94 @@ export default function VictoryPage() {
     <RouteGuard requiredLevel="victory">
       <div
         ref={container}
-        className="max-w-3xl mx-auto px-4 pt-20 sm:pt-24 pb-12 flex-1 flex flex-col justify-center font-sans"
+        className="max-w-3xl mx-auto px-4 pt-20 sm:pt-24 pb-16 flex-1 flex flex-col justify-center font-sans relative"
       >
+        {/* Ambient Celebration Glow */}
+        <div
+          className="absolute -top-10 left-1/2 -translate-x-1/2 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* Floating Trophy Icon */}
+        <div className="anim-trophy flex justify-center mb-3">
+          <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500/20 via-rose-500/15 to-indigo-500/20 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/10">
+            <Trophy className="w-8 h-8 text-amber-400" />
+            <Sparkles className="w-4 h-4 text-amber-300 absolute -top-1 -right-1 animate-pulse" />
+          </div>
+        </div>
+
         {/* Header */}
-        <div className="text-center mb-8 anim-header">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 text-rose-300 rounded-full text-xs font-medium mb-3">
+        <div className="text-center mb-6 anim-header">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 border border-rose-500/25 text-rose-300 rounded-full text-xs font-medium mb-3">
             <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
-            <ScrambleText text="Spesial Buat Caca" speed={25} />
+            <ScrambleText text="Spesial Buat Caca: Misi Sukses" speed={22} />
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-100">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-100">
             Keren banget, kamu berhasil Caca!
           </h1>
-          <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto leading-relaxed">
-            Semua pertahanan brankas berhasil kamu tembus. Sekarang waktunya kamu nagih janji hadiah ke aku.
+          <p className="text-slate-400 text-xs sm:text-sm mt-2 max-w-md mx-auto leading-relaxed">
+            Semua pertahanan brankas berhasil kamu tembus. Sekarang waktunya kamu nagih janji hadiah
+            ke aku.
           </p>
+
+          {/* Celebration Button */}
+          <div className="mt-4 flex justify-center">
+            <button
+              type="button"
+              onClick={triggerCelebration}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-850 border border-slate-700/80 hover:border-slate-600 text-xs text-slate-300 hover:text-white transition-all active:scale-95 shadow-sm"
+              title="Tembak kembang api konfeti"
+            >
+              <PartyPopper className="w-3.5 h-3.5 text-rose-400" />
+              <span>Rayakan Lagi</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 3 Mission Cleared Badges */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-7">
+          <div className="anim-badges flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/50 border border-emerald-500/20 text-xs">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div className="truncate">
+              <span className="text-[10px] text-slate-400 font-mono block">LEVEL 01</span>
+              <span className="text-slate-200 font-medium truncate block">Steganografi LSB</span>
+            </div>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 ml-auto flex-shrink-0" />
+          </div>
+
+          <div className="anim-badges flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/50 border border-emerald-500/20 text-xs">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <Binary className="w-4 h-4" />
+            </div>
+            <div className="truncate">
+              <span className="text-[10px] text-slate-400 font-mono block">LEVEL 02</span>
+              <span className="text-slate-200 font-medium truncate block">Hash Cracking MD5</span>
+            </div>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 ml-auto flex-shrink-0" />
+          </div>
+
+          <div className="anim-badges flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/50 border border-emerald-500/20 text-xs">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <Lock className="w-4 h-4" />
+            </div>
+            <div className="truncate">
+              <span className="text-[10px] text-slate-400 font-mono block">LEVEL 03</span>
+              <span className="text-slate-200 font-medium truncate block">Fernet AES-128</span>
+            </div>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 ml-auto flex-shrink-0" />
+          </div>
         </div>
 
         {/* Decrypted Letter Card with Spotlight */}
         <SpotlightCard className="anim-letter bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-sm mb-8 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 text-xs">
             <span className="font-semibold text-slate-300">Pesan dari Dalam Brankas</span>
-            <span className="flex items-center gap-1 text-emerald-400">
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Terdekripsi</span>
+              <span>Terdekripsi Penuh</span>
             </span>
           </div>
 
@@ -197,6 +313,10 @@ export default function VictoryPage() {
         {/* Rewards Section */}
         <div className="space-y-4 mb-8">
           <div className="anim-reward-heading">
+            <div className="inline-flex items-center gap-1.5 text-xs text-indigo-400 font-medium mb-1">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>REWARD UNLOCKED</span>
+            </div>
             <h2 className="text-base font-semibold text-slate-100">Klaim Hadiah Kamu</h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Pilih salah satu reward di bawah ini untuk langsung kirim pesan WhatsApp ke aku:
@@ -205,7 +325,13 @@ export default function VictoryPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* 1. Makan Enak */}
-            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+            <SpotlightCard
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 ${
+                selectedReward === "makan"
+                  ? "border-amber-500/60 ring-2 ring-amber-500/30 bg-amber-950/20"
+                  : "border-slate-800 hover:border-slate-700"
+              }`}
+            >
               <div>
                 <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-2.5">
                   <Utensils className="w-4 h-4" />
@@ -222,7 +348,7 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("makan");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Makan</span>
@@ -230,7 +356,13 @@ export default function VictoryPage() {
             </SpotlightCard>
 
             {/* 2. Jajan Es Krim */}
-            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+            <SpotlightCard
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 ${
+                selectedReward === "eskrim"
+                  ? "border-rose-500/60 ring-2 ring-rose-500/30 bg-rose-950/20"
+                  : "border-slate-800 hover:border-slate-700"
+              }`}
+            >
               <div>
                 <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-2.5">
                   <IceCream className="w-4 h-4" />
@@ -247,7 +379,7 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("eskrim");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Es Krim</span>
@@ -255,7 +387,13 @@ export default function VictoryPage() {
             </SpotlightCard>
 
             {/* 3. Jalan-Jalan */}
-            <SpotlightCard className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-all duration-300 hover:-translate-y-1">
+            <SpotlightCard
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 ${
+                selectedReward === "main"
+                  ? "border-indigo-500/60 ring-2 ring-indigo-500/30 bg-indigo-950/20"
+                  : "border-slate-800 hover:border-slate-700"
+              }`}
+            >
               <div>
                 <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-2.5">
                   <Compass className="w-4 h-4" />
@@ -272,7 +410,7 @@ export default function VictoryPage() {
                   setShowCustomInput(false);
                   handleClaimWhatsApp("main");
                 }}
-                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                className="w-full py-2 px-2.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-100 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Klaim Jalan</span>
@@ -281,8 +419,10 @@ export default function VictoryPage() {
 
             {/* 4. Request Sendiri */}
             <SpotlightCard
-              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${
-                showCustomInput ? "border-purple-500/50 bg-purple-950/20" : "border-slate-800 hover:border-slate-700"
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 ${
+                showCustomInput || selectedReward === "request"
+                  ? "border-purple-500/60 ring-2 ring-purple-500/30 bg-purple-950/20"
+                  : "border-slate-800 hover:border-slate-700"
               }`}
             >
               <div>
@@ -302,7 +442,7 @@ export default function VictoryPage() {
                   setSelectedReward("request");
                   playSound("click");
                 }}
-                className="w-full py-2 px-2.5 bg-purple-600/80 hover:bg-purple-600 active:scale-98 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
+                className="w-full py-2 px-2.5 bg-purple-600/80 hover:bg-purple-600 active:scale-95 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{showCustomInput ? "Tutup Form" : "Pilih Request"}</span>
@@ -337,7 +477,7 @@ export default function VictoryPage() {
                 <button
                   type="button"
                   onClick={() => handleClaimWhatsApp("request", customText)}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 active:scale-95 text-white text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-500"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Kirim ke WA</span>
@@ -350,7 +490,7 @@ export default function VictoryPage() {
           )}
 
           {selectedReward && (
-            <p className="text-xs text-slate-400 text-center">
+            <p className="text-xs text-slate-400 text-center animate-fade-in">
               Pilihan tersimpan. WhatsApp dibuka di tab baru.
             </p>
           )}
@@ -358,14 +498,14 @@ export default function VictoryPage() {
 
         {/* Footer Action */}
         <div className="flex items-center justify-between pt-4 border-t border-slate-800/80 text-xs text-slate-500">
-          <span>Tantangan 3/3 Selesai</span>
+          <span>Semua 3 Level Berhasil Dituntaskan</span>
           <button
             type="button"
             onClick={handleReplay}
             className="flex items-center gap-1.5 text-slate-400 hover:text-slate-200 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Main Ulang</span>
+            <span>Main Ulang dari Awal</span>
           </button>
         </div>
       </div>
