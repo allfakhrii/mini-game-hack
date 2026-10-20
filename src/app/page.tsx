@@ -1,226 +1,176 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useGame } from "@/context/GameContext";
-import GlitchTransition from "@/components/GlitchTransition";
-import {
-  Download,
-  CheckCircle2,
-  AlertCircle,
-  ArrowRight,
-  Code2,
-  ChevronDown,
-  ChevronUp,
-  BookOpen,
-} from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { Eye, Binary, Lock, ArrowRight, Shield, Sparkles } from "lucide-react";
 
-export default function Level1Page() {
-  const { verifyLevel1, level1Completed, playSound } = useGame();
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [showHint, setShowHint] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+export default function StartPage() {
+  const router = useRouter();
+  const container = useRef<HTMLDivElement>(null);
+  const { playSound } = useGame();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!password.trim()) return;
+  // Buttery Smooth GSAP Entrance Animation
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    setLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+      tl.from(".hero-badge", {
+        y: -15,
+        opacity: 0,
+        duration: 0.6,
+      })
+        .from(
+          ".hero-title",
+          {
+            y: 25,
+            opacity: 0,
+            duration: 0.8,
+          },
+          "-=0.3"
+        )
+        .from(
+          ".hero-desc",
+          {
+            y: 20,
+            opacity: 0,
+            duration: 0.7,
+          },
+          "-=0.4"
+        )
+        .from(
+          ".mission-card",
+          {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.12,
+          },
+          "-=0.3"
+        )
+        .from(
+          ".cta-section",
+          {
+            y: 20,
+            opacity: 0,
+            duration: 0.6,
+          },
+          "-=0.2"
+        );
+    },
+    { scope: container }
+  );
+
+  const handleStartMission = () => {
     playSound("click");
 
-    const result = await verifyLevel1(password);
-    setLoading(false);
-
-    if (result.success) {
-      setSuccessMessage("Sandi benar! Mengalihkan ke Level 2...");
-      setIsTransitioning(true);
-    } else {
-      setErrorMessage("Sandi belum cocok. Coba periksa kembali hasil pembacaan LSB di gambarmu.");
-    }
-  };
-
-  const handleNextLevel = () => {
-    playSound("click");
-    setIsTransitioning(true);
+    // Smooth exit animation before page navigation
+    gsap.to(container.current, {
+      y: -20,
+      opacity: 0,
+      duration: 0.45,
+      ease: "power2.in",
+      onComplete: () => {
+        router.push("/level-1");
+      },
+    });
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
-      {isTransitioning && (
-        <GlitchTransition title="Sandi Diterima" nextRoute="/level-2" />
-      )}
-
-      {/* Top Header - Full Width */}
-      <div className="mb-8">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
-          Tantangan 1 dari 3: Steganografi
+    <div
+      ref={container}
+      className="max-w-4xl mx-auto px-4 py-12 sm:py-20 flex-1 flex flex-col justify-center font-sans text-center"
+    >
+      {/* Top Badge */}
+      <div className="hero-badge mb-5 flex justify-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-medium">
+          <Shield className="w-3.5 h-3.5 text-indigo-400" />
+          <span>Misi Khusus: Secret Vault Challenge</span>
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100">
-          Seni Menyembunyikan Brankas di Tempat Terbuka
-        </h1>
       </div>
 
-      {/* Balanced 2-Column Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        {/* Left Column: Story & Insight + Script Helper */}
-        <div className="lg:col-span-7 space-y-5">
-          {/* Story Card */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
-            <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
-              <BookOpen className="w-4 h-4" />
-              <span>CATATAN SEJARAH & TEKNIS</span>
-            </div>
+      {/* Main Headline */}
+      <h1 className="hero-title text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-100 max-w-2xl mx-auto leading-tight sm:leading-tight">
+        Bisakah Kamu Membuka Brankas Rahasia Ini?
+      </h1>
 
-            <p>
-              Sejak tahun 440 Sebelum Masehi, para intelijen sadar bahwa keamanan terhebat bukanlah
-              membuat brankas yang tebal, melainkan menyembunyikan fakta bahwa brankas itu ada.
-              Teknik kuno ini sekarang berevolusi ke dunia digital.
-            </p>
+      {/* Subtitle / Narrative */}
+      <p className="hero-desc text-slate-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed">
+        Sebuah teka-teki keamanan siber interaktif yang dirancang khusus untuk menguji ketelitian
+        dan kemampuan decoding-mu. Pecahkan tiga lapis pertahanan untuk membuka pesan rahasia dan
+        mengklaim hadiahmu.
+      </p>
 
-            <p>
-              Mata manusia mungkin melihat file foto ini sangat normal. Tapi secara matematis,
-              aku sudah memanipulasi angka biner di bagian paling ujung (Least Significant Bit) dari
-              susunan warna RGB-nya. Ada teknik Steganografi yang menyelimuti sebuah pesan rahasia
-              di dalam piksel gambar ini.
-            </p>
-
-            <div className="pt-1 text-slate-200 font-medium">
-              <span className="text-indigo-300 font-semibold">Misi untukmu:</span> Gambar di
-              samping adalah sebuah brankas transparan. Gunakan tool atau online decoder
-              Steganografi (LSB) untuk mengekstrak isinya. Balas pesan ini kalau kamu berhasil
-              memecahkan apa kalimat rahasia yang aku sembunyikan di dalamnya!
-            </div>
+      {/* 3 Mission Cards Preview */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-10 text-left">
+        {/* Stage 1 */}
+        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+            <Eye className="w-5 h-5" />
           </div>
-
-          {/* Python Helper Box */}
-          <div className="border border-slate-800/90 rounded-2xl bg-slate-900/40 overflow-hidden text-xs shadow-sm">
-            <button
-              type="button"
-              onClick={() => {
-                playSound("click");
-                setShowHint(!showHint);
-              }}
-              className="w-full flex items-center justify-between p-4 text-slate-300 hover:text-white transition-colors"
-            >
-              <span className="flex items-center gap-2 font-medium">
-                <Code2 className="w-4 h-4 text-indigo-400" />
-                <span>Petunjuk script Python (LSB Decode)</span>
-              </span>
-              {showHint ? (
-                <ChevronUp className="w-4 h-4 text-slate-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-slate-400" />
-              )}
-            </button>
-
-            {showHint && (
-              <div className="px-4 pb-4 border-t border-slate-800/60 text-slate-300 space-y-2">
-                <p className="text-xs text-slate-400 pt-2">
-                  Kamu bisa menggunakan library <code className="text-indigo-300 font-mono">stegano</code> untuk
-                  membaca pesan LSB:
-                </p>
-                <pre className="p-3 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-200 overflow-x-auto leading-relaxed select-all">
-                  <code>{`pip install stegano\npython -c "from stegano import lsb; print(lsb.reveal('stegano.png'))"`}</code>
-                </pre>
-              </div>
-            )}
-          </div>
+          <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
+            Tahap 01
+          </span>
+          <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
+            Steganografi Citra
+          </h2>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Membongkar pesan biner yang disembunyikan di balik piksel foto tanpa merusak
+            tampilannya.
+          </p>
         </div>
 
-        {/* Right Column: Photo Target + Action & Input Form */}
-        <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
-          {/* Photo Display with Natural Frame */}
-          <div className="space-y-3">
-            <div className="relative rounded-xl overflow-hidden bg-slate-950 aspect-[4/3] w-full border border-slate-800">
-              <Image
-                src="/stegano.png"
-                alt="Foto target steganografi LSB"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 420px"
-                priority
-              />
-            </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-400 pt-0.5">
-              <span>Berkas: <strong className="text-slate-200 font-mono">stegano.png</strong></span>
-              <span>Ukuran: 11.5 MB</span>
-            </div>
-
-            <a
-              href="/stegano.png"
-              download="stegano.png"
-              onClick={() => playSound("click")}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-            >
-              <Download className="w-4 h-4" />
-              <span>Unduh Foto Asli (Raw .PNG)</span>
-            </a>
+        {/* Stage 2 */}
+        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+            <Binary className="w-5 h-5" />
           </div>
-
-          <div className="h-px bg-slate-800/80" />
-
-          {/* Validation Form */}
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            <div>
-              <label
-                htmlFor="stegano-password"
-                className="block text-xs font-medium text-slate-300 mb-1.5"
-              >
-                Masukkan sandi yang kamu temukan
-              </label>
-              <input
-                id="stegano-password"
-                type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ketik kalimat rahasia hasil decode..."
-                className="w-full bg-slate-950 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none transition-colors"
-                disabled={loading || level1Completed}
-              />
-            </div>
-
-            {errorMessage && (
-              <div className="flex items-center gap-2 p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg text-xs text-rose-300">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
-                <span>{errorMessage}</span>
-              </div>
-            )}
-
-            {(successMessage || level1Completed) && (
-              <div className="space-y-2.5">
-                <div className="flex items-center gap-2 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-xs text-emerald-300">
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                  <span>{successMessage || "Level 1 selesai! Sandi cocok."}</span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleNextLevel}
-                  className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg text-xs flex items-center justify-center gap-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                >
-                  <span>Lanjut ke Level 2: Hash Cracking</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
-            {!level1Completed && (
-              <button
-                type="submit"
-                disabled={loading || !password.trim()}
-                className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed text-slate-100 font-medium rounded-lg text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-              >
-                {loading ? "Memverifikasi..." : "Verifikasi Sandi"}
-              </button>
-            )}
-          </form>
+          <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
+            Tahap 02
+          </span>
+          <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
+            Hash Cracking
+          </h2>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Menembus sidik jari digital satu arah MD5 menggunakan teknik serangan kamus (Dictionary
+            Attack).
+          </p>
         </div>
+
+        {/* Stage 3 */}
+        <div className="mission-card bg-slate-900/60 border border-slate-800 rounded-2xl p-5 shadow-sm hover:border-slate-700 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+            <Lock className="w-5 h-5" />
+          </div>
+          <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block mb-1">
+            Tahap 03
+          </span>
+          <h2 className="text-slate-200 font-semibold text-sm mb-1.5">
+            Kriptografi Fernet AES
+          </h2>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Mendekripsi berkas berstandar militer AES-128 untuk membuka surat rahasia dan hadiah
+            akhir.
+          </p>
+        </div>
+      </div>
+
+      {/* Start Button CTA */}
+      <div className="cta-section flex flex-col items-center justify-center gap-3">
+        <button
+          onClick={handleStartMission}
+          className="group px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm rounded-xl transition-all duration-300 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 flex items-center gap-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 active:scale-95"
+        >
+          <span>Mulai Tantangan Sekarang</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </button>
+
+        <p className="text-xs text-slate-500 mt-2">
+          Siapkan terminal dan Python-mu. Permainan dimulai dari Level 1.
+        </p>
       </div>
     </div>
   );

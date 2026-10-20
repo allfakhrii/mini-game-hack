@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import RouteGuard from "@/components/RouteGuard";
 import { useGame } from "@/context/GameContext";
 import GlitchTransition from "@/components/GlitchTransition";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   Download,
   Key,
@@ -20,6 +22,7 @@ import {
 } from "lucide-react";
 
 export default function Level3CryptoPage() {
+  const container = useRef<HTMLDivElement>(null);
   const { verifyLevel3, level3Completed, playSound } = useGame();
   const [flagInput, setFlagInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,6 +33,33 @@ export default function Level3CryptoPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const FERNET_KEY = "qneLqT91Aw6ztBlrYkabmsWzoa6Aa2G7PDxqgta9YZ4=";
+
+  // Smooth GSAP Entrance Animation
+  useGSAP(
+    () => {
+      gsap.from(".anim-header", {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      gsap.from(".anim-left", {
+        y: 24,
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.12,
+        ease: "power2.out",
+      });
+      gsap.from(".anim-right", {
+        y: 24,
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.22,
+        ease: "power2.out",
+      });
+    },
+    { scope: container }
+  );
 
   const handleCopyKey = () => {
     playSound("click");
@@ -65,13 +95,16 @@ export default function Level3CryptoPage() {
 
   return (
     <RouteGuard requiredLevel={3}>
-      <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
+      <div
+        ref={container}
+        className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+      >
         {isTransitioning && (
           <GlitchTransition title="Dekripsi Berhasil" nextRoute="/victory" />
         )}
 
         {/* Top Header - Full Width */}
-        <div className="mb-8">
+        <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
             Tantangan 3 dari 3: Kriptografi Kunci Simetris
           </div>
@@ -83,7 +116,7 @@ export default function Level3CryptoPage() {
         {/* Balanced 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Column: Insight & Python Helper */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-7 space-y-5 anim-left">
             {/* Story Card */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
@@ -149,7 +182,7 @@ export default function Level3CryptoPage() {
           </div>
 
           {/* Right Column: Encrypted File, Key, & Input Form */}
-          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
+          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
             {/* Download File */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between text-xs text-slate-300">

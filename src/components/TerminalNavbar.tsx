@@ -20,7 +20,7 @@ export default function TerminalNavbar() {
 
   const handleReset = () => {
     playSound("click");
-    if (confirm("Mulai ulang dari Level 1?")) {
+    if (confirm("Mulai ulang dari awal?")) {
       resetGame();
       window.location.href = "/";
     }
@@ -41,62 +41,66 @@ export default function TerminalNavbar() {
 
         {/* Level Steps */}
         <nav aria-label="Progress tantangan" className="flex items-center gap-1 sm:gap-2">
-          <div
+          <Link
+            href={pathname === "/" ? "#" : "/level-1"}
             className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
-              pathname === "/"
+              pathname === "/level-1"
                 ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
                 : level1Completed
-                ? "text-emerald-400"
+                ? "text-emerald-400 hover:text-emerald-300"
                 : "text-slate-500"
             }`}
           >
             {level1Completed && <Check className="w-3.5 h-3.5" />}
             <span>1. Foto</span>
-          </div>
+          </Link>
 
           <span className="text-slate-700">/</span>
 
-          <div
+          <Link
+            href={level1Completed ? "/level-2" : "#"}
             className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
               pathname === "/level-2"
                 ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
                 : level2Completed
-                ? "text-emerald-400"
+                ? "text-emerald-400 hover:text-emerald-300"
                 : "text-slate-500"
             }`}
           >
             {level2Completed && <Check className="w-3.5 h-3.5" />}
             <span>2. Hash</span>
-          </div>
+          </Link>
 
           <span className="text-slate-700">/</span>
 
-          <div
+          <Link
+            href={level2Completed ? "/level-3" : "#"}
             className={`px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
               pathname === "/level-3"
                 ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/30"
                 : level3Completed
-                ? "text-emerald-400"
+                ? "text-emerald-400 hover:text-emerald-300"
                 : "text-slate-500"
             }`}
           >
             {level3Completed && <Check className="w-3.5 h-3.5" />}
             <span>3. Berkas</span>
-          </div>
+          </Link>
 
           <span className="text-slate-700">/</span>
 
-          <div
+          <Link
+            href={level3Completed ? "/victory" : "#"}
             className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
               pathname === "/victory"
                 ? "bg-rose-500/10 text-rose-300 border border-rose-500/30"
                 : level3Completed
-                ? "text-rose-400"
+                ? "text-rose-400 hover:text-rose-300"
                 : "text-slate-500"
             }`}
           >
             <span>Hadiah</span>
-          </div>
+          </Link>
         </nav>
 
         {/* Controls */}

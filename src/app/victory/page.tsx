@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RouteGuard from "@/components/RouteGuard";
 import { useGame } from "@/context/GameContext";
 import confetti from "canvas-confetti";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   Utensils,
   IceCream,
@@ -17,10 +19,53 @@ import {
 } from "lucide-react";
 
 export default function VictoryPage() {
+  const container = useRef<HTMLDivElement>(null);
   const { playSound, resetGame } = useGame();
   const [selectedReward, setSelectedReward] = useState<string | null>(null);
   const [customText, setCustomText] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
+
+  // Smooth GSAP Entrance Animation
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.from(".anim-header", {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+      })
+        .from(
+          ".anim-letter",
+          {
+            y: 25,
+            opacity: 0,
+            duration: 0.7,
+          },
+          "-=0.35"
+        )
+        .from(
+          ".anim-reward-heading",
+          {
+            y: 15,
+            opacity: 0,
+            duration: 0.5,
+          },
+          "-=0.3"
+        )
+        .from(
+          ".anim-reward-card",
+          {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.09,
+          },
+          "-=0.2"
+        );
+    },
+    { scope: container }
+  );
 
   useEffect(() => {
     playSound("victory");
@@ -97,9 +142,12 @@ export default function VictoryPage() {
 
   return (
     <RouteGuard requiredLevel="victory">
-      <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
+      <div
+        ref={container}
+        className="max-w-3xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+      >
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-500/10 text-rose-300 rounded-full text-xs font-medium mb-3">
             <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
             <span>Semua Tantangan Selesai</span>
@@ -114,7 +162,7 @@ export default function VictoryPage() {
         </div>
 
         {/* Decrypted Letter Card */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-sm mb-8 space-y-4">
+        <div className="anim-letter bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-7 shadow-sm mb-8 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 text-xs">
             <span className="font-semibold text-slate-300">Pesan dari Dalam Brankas</span>
             <span className="flex items-center gap-1 text-emerald-400">
@@ -150,7 +198,7 @@ export default function VictoryPage() {
 
         {/* Rewards Section */}
         <div className="space-y-4 mb-8">
-          <div>
+          <div className="anim-reward-heading">
             <h2 className="text-base font-semibold text-slate-100">Klaim Hadiah Kamu</h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Pilih salah satu reward di bawah ini untuk langsung kirim pesan WhatsApp ke aku:
@@ -159,7 +207,7 @@ export default function VictoryPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* 1. Makan Enak */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mb-2.5">
                   <Utensils className="w-4 h-4" />
@@ -184,7 +232,7 @@ export default function VictoryPage() {
             </div>
 
             {/* 2. Jajan Es Krim */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center mb-2.5">
                   <IceCream className="w-4 h-4" />
@@ -209,7 +257,7 @@ export default function VictoryPage() {
             </div>
 
             {/* 3. Jalan-Jalan */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <div className="anim-reward-card bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div>
                 <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-2.5">
                   <Compass className="w-4 h-4" />
@@ -235,7 +283,7 @@ export default function VictoryPage() {
 
             {/* 4. Request Sendiri */}
             <div
-              className={`bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-colors ${
+              className={`anim-reward-card bg-slate-900/60 border rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-colors ${
                 showCustomInput ? "border-purple-500/50 bg-purple-950/20" : "border-slate-800 hover:border-slate-700"
               }`}
             >

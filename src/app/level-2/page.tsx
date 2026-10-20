@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import RouteGuard from "@/components/RouteGuard";
 import { useGame } from "@/context/GameContext";
 import GlitchTransition from "@/components/GlitchTransition";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   Download,
   Copy,
@@ -20,6 +22,7 @@ import {
 } from "lucide-react";
 
 export default function Level2HashPage() {
+  const container = useRef<HTMLDivElement>(null);
   const { verifyLevel2, level2Completed, playSound } = useGame();
   const [wordInput, setWordInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,6 +33,33 @@ export default function Level2HashPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const TARGET_HASH = "a0095443fbfe1b3ebf4225636a1f86b8";
+
+  // Smooth GSAP Entrance Animation
+  useGSAP(
+    () => {
+      gsap.from(".anim-header", {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      gsap.from(".anim-left", {
+        y: 24,
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.12,
+        ease: "power2.out",
+      });
+      gsap.from(".anim-right", {
+        y: 24,
+        opacity: 0,
+        duration: 0.7,
+        delay: 0.22,
+        ease: "power2.out",
+      });
+    },
+    { scope: container }
+  );
 
   const handleCopyHash = () => {
     playSound("click");
@@ -67,13 +97,16 @@ export default function Level2HashPage() {
 
   return (
     <RouteGuard requiredLevel={2}>
-      <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans">
+      <div
+        ref={container}
+        className="max-w-5xl mx-auto px-4 py-8 sm:py-12 flex-1 flex flex-col justify-center font-sans"
+      >
         {isTransitioning && (
           <GlitchTransition title="Hash Berhasil Dipecahkan" nextRoute="/level-3" />
         )}
 
         {/* Top Header - Full Width */}
-        <div className="mb-8">
+        <div className="mb-8 anim-header">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-3">
             Tantangan 2 dari 3: Hash Cracking
           </div>
@@ -85,7 +118,7 @@ export default function Level2HashPage() {
         {/* Balanced 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Column: Insight & Python Helper */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-7 space-y-5 anim-left">
             {/* Story Card */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 text-slate-300 text-sm leading-relaxed space-y-3.5 shadow-sm">
               <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs border-b border-slate-800/80 pb-2">
@@ -152,7 +185,7 @@ export default function Level2HashPage() {
           </div>
 
           {/* Right Column: Hash Target, Wordlist, & Input Form */}
-          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
+          <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 anim-right">
             {/* Target Hash Card */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between text-xs text-slate-300">
