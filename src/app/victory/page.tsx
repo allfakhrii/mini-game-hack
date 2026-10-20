@@ -32,13 +32,49 @@ export default function VictoryPage() {
   const [customText, setCustomText] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
 
-  // Grand multi-burst confetti celebration sequence
+  // Heart shape path for canvas-confetti
+  const getHeartShape = useCallback(() => {
+    try {
+      if (typeof confetti.shapeFromPath === "function") {
+        return confetti.shapeFromPath({
+          path: "M167 72c19,-38 37,-56 75,-56 42,0 76,33 76,75 0,76 -76,151 -151,227 -76,-76 -151,-151 -151,-227 0,-42 33,-75 76,-75 38,0 57,18 75,56z",
+        });
+      }
+    } catch {
+      // fallback
+    }
+    return "circle";
+  }, []);
+
+  // Heart Confetti Shower
+  const triggerHeartConfetti = useCallback(
+    (originX = 0.5, originY = 0.5, count = 50) => {
+      const heart = getHeartShape();
+      const heartColors = ["#f43f5e", "#ec4899", "#fda4af", "#e11d48", "#fb7185", "#ff4d6d"];
+
+      confetti({
+        particleCount: count,
+        spread: 85,
+        origin: { x: originX, y: originY },
+        shapes: [heart],
+        scalar: 2.2,
+        ticks: 220,
+        gravity: 0.85,
+        decay: 0.93,
+        colors: heartColors,
+        zIndex: 9999,
+      });
+    },
+    [getHeartShape]
+  );
+
+  // Grand multi-burst confetti celebration sequence with hearts
   const triggerCelebration = useCallback(() => {
     playSound("victory");
 
     // Left cannon burst
     confetti({
-      particleCount: 80,
+      particleCount: 75,
       angle: 60,
       spread: 65,
       origin: { x: 0.05, y: 0.75 },
@@ -48,7 +84,7 @@ export default function VictoryPage() {
 
     // Right cannon burst
     confetti({
-      particleCount: 80,
+      particleCount: 75,
       angle: 120,
       spread: 65,
       origin: { x: 0.95, y: 0.75 },
@@ -59,14 +95,24 @@ export default function VictoryPage() {
     // Center starburst slightly delayed
     setTimeout(() => {
       confetti({
-        particleCount: 110,
-        spread: 100,
+        particleCount: 85,
+        spread: 90,
         origin: { x: 0.5, y: 0.4 },
         colors: ["#f43f5e", "#ec4899", "#818cf8", "#38bdf8", "#fbbf24"],
         zIndex: 9999,
       });
-    }, 280);
-  }, [playSound]);
+    }, 240);
+
+    // Beautiful Heart Confetti shower right after!
+    setTimeout(() => {
+      triggerHeartConfetti(0.5, 0.45, 60);
+    }, 420);
+
+    setTimeout(() => {
+      triggerHeartConfetti(0.25, 0.6, 35);
+      triggerHeartConfetti(0.75, 0.6, 35);
+    }, 700);
+  }, [playSound, triggerHeartConfetti]);
 
   // Smooth GSAP Entrance Animation
   useGSAP(
@@ -129,14 +175,8 @@ export default function VictoryPage() {
     playSound("click");
     setSelectedReward(type);
 
-    // Mini localized confetti burst for tactile reward feedback
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.8 },
-      zIndex: 9999,
-      colors: ["#10b981", "#6366f1", "#ec4899"],
-    });
+    // Mini localized heart confetti burst for tactile reward feedback
+    triggerHeartConfetti(0.5, 0.75, 45);
 
     try {
       const res = await fetch("/api/claim-reward", {
@@ -218,23 +258,36 @@ export default function VictoryPage() {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-100">
-            Keren banget, kamu berhasil Caca!
+            Keren banget, kamu berhasil!
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm mt-2 max-w-md mx-auto leading-relaxed">
-            Semua pertahanan brankas berhasil kamu tembus. Sekarang waktunya kamu nagih janji hadiah
+            Semua tantangan berhasil kamu tembus. Saatnya kamu nagih janji hadiah
             ke aku.
           </p>
 
-          {/* Celebration Button */}
-          <div className="mt-4 flex justify-center">
+          {/* Celebration Action Buttons */}
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
             <button
               type="button"
               onClick={triggerCelebration}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-850 border border-slate-700/80 hover:border-slate-600 text-xs text-slate-300 hover:text-white transition-all active:scale-95 shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-850 border border-slate-700/80 hover:border-slate-600 text-xs text-slate-200 hover:text-white transition-all active:scale-95 shadow-sm"
               title="Tembak kembang api konfeti"
             >
-              <PartyPopper className="w-3.5 h-3.5 text-rose-400" />
-              <span>Rayakan Lagi</span>
+              <PartyPopper className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Kembang Api</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                playSound("click");
+                triggerHeartConfetti(0.5, 0.45, 60);
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/50 text-xs text-rose-300 hover:text-rose-200 transition-all active:scale-95 shadow-sm"
+              title="Hujan confetti bentuk hati / love"
+            >
+              <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
+              <span>Hujan Love</span>
             </button>
           </div>
         </div>
@@ -305,7 +358,7 @@ export default function VictoryPage() {
             </p>
 
             <p className="pt-2 text-right text-xs text-rose-300 font-medium">
-              Once again, you did a great job and I&apos;m so proud of you, Caca!
+              Once again, you did a great job and I&apos;m so proud of you, Babe!
             </p>
           </div>
         </SpotlightCard>
@@ -337,9 +390,6 @@ export default function VictoryPage() {
                   <Utensils className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Makan Enak</h3>
-                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
-                  Kulineran makanan favoritmu.
-                </p>
               </div>
 
               <button
@@ -368,9 +418,6 @@ export default function VictoryPage() {
                   <IceCream className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Jajan Es Krim</h3>
-                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
-                  Gelato, McFlurry, atau dessert manis.
-                </p>
               </div>
 
               <button
@@ -399,9 +446,6 @@ export default function VictoryPage() {
                   <Compass className="w-4 h-4" />
                 </div>
                 <h3 className="font-semibold text-slate-200 text-xs sm:text-sm mb-1">Jalan-Jalan</h3>
-                <p className="text-[11px] text-slate-400 mb-3 leading-normal">
-                  Bioskop, arcade date, atau jalan sore.
-                </p>
               </div>
 
               <button
