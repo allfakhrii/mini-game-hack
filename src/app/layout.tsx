@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { GameProvider } from "@/context/GameContext";
 import TerminalNavbar from "@/components/TerminalNavbar";
+import TerminalFooter from "@/components/TerminalFooter";
 import AmbientBackground from "@/components/AmbientBackground";
 
 const geistSans = localFont({
@@ -36,9 +37,7 @@ export default function RootLayout({
           <div className="relative z-10 flex flex-col min-h-screen">
             <TerminalNavbar />
             <main className="flex-1 flex flex-col">{children}</main>
-            <footer className="py-6 border-t border-slate-800/60 text-center text-xs text-slate-500 font-sans">
-              Dibuat khusus untuk Caca. Selesaikan misinya dan klaim hadiahmu ke aku.
-            </footer>
+            <TerminalFooter />
           </div>
         </GameProvider>
       </body>

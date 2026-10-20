@@ -18,6 +18,11 @@ export default function TerminalNavbar() {
   } = useGame();
   const pathname = usePathname();
 
+  // Hide navbar on landing/start page
+  if (pathname === "/") {
+    return null;
+  }
+
   const handleReset = () => {
     playSound("click");
     if (confirm("Mulai ulang dari awal?")) {
