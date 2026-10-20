@@ -21,14 +21,11 @@ export default function DynamicIslandNavbar() {
   } = useGame();
   const pathname = usePathname();
 
-  // Hide Dynamic Island on landing page
-  if (pathname === "/") {
-    return null;
-  }
-
-  // Smooth entrance animation for the Dynamic Island
+  // Smooth entrance animation for the Dynamic Island (Must run before any early return)
   useGSAP(
     () => {
+      if (pathname === "/" || !islandRef.current) return;
+
       gsap.fromTo(
         islandRef.current,
         { y: -30, opacity: 0, scale: 0.9 },
@@ -42,8 +39,13 @@ export default function DynamicIslandNavbar() {
         }
       );
     },
-    { scope: islandRef }
+    { scope: islandRef, dependencies: [pathname] }
   );
+
+  // Hide Dynamic Island on landing page
+  if (pathname === "/") {
+    return null;
+  }
 
   const handleReset = () => {
     playSound("click");
