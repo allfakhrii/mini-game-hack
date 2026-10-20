@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🕵️‍♂️ CTF Secret Vault Challenge: Operation Al & Caca
 
-## Getting Started
+Aplikasi web Capture The Flag (CTF) interaktif dua tingkat (Two-Stage Cyber Challenge) yang dibangun menggunakan **Next.js 14 (App Router)**, **TypeScript**, dan **Tailwind CSS**. Didesain dengan estetika terminal cyberpunk retro, audio synthesizer Web Audio API, sistem keamanan Anti-Curang (Route Guard & Server-Side Verification), serta transisi kemenangan romantis dengan integrasi WhatsApp!
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🗺️ Alur Permainan (Player Flow)
+
+```
+[ Landing Page: Level 1 ]
+   │
+   ├─► Unduh target: stegano.png
+   ├─► Decode LSB di terminal Python -> Sandi: "alsayangsamacaca"
+   ├─► Masukkan sandi ke terminal web
+   ▼
+[ Glitch Transition // Bypassing Kernel ]
+   │
+   ▼
+[ Level 2: Jantung Pertahanan ]
+   │
+   ├─► Unduh file enkripsi: hadiah.txt
+   ├─► Salin kunci Fernet: qneLqT91Aw6ztBlrYkabmsWzoa6Aa2G7PDxqgta9YZ4=
+   ├─► Dekripsi file via Python cryptography -> Teks Rahasia
+   ├─► Paste hasil dekripsi ke terminal web
+   ▼
+[ System Breach Transition ]
+   │
+   ▼
+[ Victory Page: Romantis & Hadiah ]
+   │
+   ├─► Hujan Konfeti & Perubahan Tema Romantic Cyberpunk
+   ├─► Surat Rahasia Brankas Terbuka
+   └─► Tombol 1-Click Klaim Hadiah ke WhatsApp (Makan Enak / Es Krim / Main)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛡️ Fitur Keamanan Anti-Curang (Anti-Cheat)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Route Guard**:
+   - Jika pemain langsung mengetik `/level-2` di address bar browser tanpa menyelesaikan Level 1, sistem akan membunyikan alarm dan menendang (redirect) kembali ke `/`.
+   - Hal yang sama berlaku untuk `/victory`: tidak bisa dibuka tanpa menyelesaikan Level 2.
+2. **Server-Side API Verification**:
+   - Pengecekan password dan dekripsi dilakukan di server Next.js (`/api/verify-level-1` dan `/api/verify-level-2`), sehingga target **tidak dapat menemukan jawaban** hanya dengan melihat client bundle JavaScript atau inspect element!
+3. **Protected Git Repository**:
+   - `kunci_rahasia.key` otomatis diabaikan oleh `.gitignore` agar tidak bocor ke publik GitHub.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 💻 Panduan Menjalankan Secara Lokal
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Jalankan Development Server
+```bash
+npm run dev
+```
+Buka browser di: [http://localhost:3000](http://localhost:3000)
 
-## Deploy on Vercel
+### 3. Build & Test Production
+```bash
+npm run build
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Panduan Deployment (Vercel / Netlify)
+
+### Opsi A: Deploy ke Vercel (Paling Direkomendasikan)
+1. Buat repository baru di GitHub (misal: `ctf-secret-vault`).
+2. Commit dan push project ini ke GitHub:
+   ```bash
+   git add .
+   git commit -m "feat: complete interactive CTF web app"
+   git branch -M main
+   git remote add origin https://github.com/<username>/<repo-name>.git
+   git push -u origin main
+   ```
+3. Buka [vercel.com](https://vercel.com) dan login dengan akun GitHub kamu.
+4. Klik **Add New Project** -> Pilih repository `ctf-secret-vault`.
+5. Klik **Deploy**. Dalam ~1 menit, link websitemu langsung aktif (contoh: `https://ctf-secret-vault.vercel.app`)!
+
+### Opsi B: Deploy ke Netlify
+1. Buka [netlify.com](https://netlify.com) dan login.
+2. Pilih **Add new site** -> **Import an existing project**.
+3. Hubungkan ke GitHub repo-mu.
+4. Netlify akan mendeteksi Next.js secara otomatis. Klik **Deploy site**.
+
+---
+
+## 🔑 Kunci Jawaban Developer (Cheat Sheet)
+
+| Level | Media | Kunci / Password | Solusi Terminal |
+|---|---|---|---|
+| **Level 1** | `stegano.png` | `alsayangsamacaca` (atau `SayangkuPintar`) | `python -c "from stegano import lsb; print(lsb.reveal('stegano.png'))"` |
+| **Level 2** | `hadiah.txt` | Key: `qneLqT91Aw6ztBlrYkabmsWzoa6Aa2G7PDxqgta9YZ4=` | Gunakan script Fernet Python untuk dekripsi |
+| **Input L2** | Terminal Form | Paste teks brankas (`ACCESS GRANTED...`) atau flag | Memicu halaman `/victory` |
+
+---
+
+*Dibuat khusus dengan cinta dan teknologi modern untuk hacker kesayangan! ❤️*
